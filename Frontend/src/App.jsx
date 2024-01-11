@@ -6,9 +6,9 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
-import Layout from "./layouts/layout.jsx";
 import Register from "./pages/Register.jsx";
 import SignIn from "./pages/SignIn.jsx";
+import Layout from "./layouts/Layout.jsx";
 function App() {
   return (
     <Router>
