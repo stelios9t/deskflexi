@@ -1,6 +1,5 @@
 import React from "react";
 import Header from "../components/Header";
-import BookingMenu from "../components/BookingMenu";
 import Hero from "../components/Hero";
 import Footer from "../components/Footer";
 
