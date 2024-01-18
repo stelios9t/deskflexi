@@ -9,6 +9,7 @@ export const AppContextProvider = ({ children }) => {
   const { isError } = useQuery("validateToken", apiClient.validateToken, {
     retry: false,
   });
+
   console.log("isError:", isError);
 
   return (

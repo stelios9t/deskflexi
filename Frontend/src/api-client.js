@@ -29,6 +29,7 @@ export const signIn = async (formData) => {
   }
   return body;
 };
+
 export const validateToken = async () => {
   const response = await fetch(`${API_BASE_URL}/api/auth/validate-token`, {
     credentials: "include",
@@ -46,5 +47,34 @@ export const signOut = async () => {
   });
   if (!response.ok) {
     throw new Error("Error during sign out");
+  }
+};
+
+export const addMyDesk = async (deskFormData) => {
+  try {
+    console.log("deskFormData:", deskFormData); // Log the form data for debugging
+
+    const response = await fetch(`${API_BASE_URL}/api/my-desks`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json", // Update content type
+      },
+      body: JSON.stringify({
+        deskNumber: deskFormData.deskNumber,
+        floor: deskFormData.floor,
+        amenities: deskFormData.amenities,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Failed to add desk: ${errorData.message}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error(error);
+    throw new Error("An unexpected error occurred.");
   }
 };

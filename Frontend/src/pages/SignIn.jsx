@@ -3,8 +3,7 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 import * as apiClient from "../api-client";
 import { useAppContext } from "../contexts/AppContext";
-import { useNavigate } from "react-router";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
   const queryClient = useQueryClient();
@@ -64,12 +63,6 @@ const SignIn = () => {
         </label>
       </div>
       <div className="flex justify-between items-center">
-        <span className="text-sm">
-          {/* not implemented yet */}
-          <Link className="underline" to="/sign-in-admin">
-            Admin Panel
-          </Link>
-        </span>
         <button
           type="submit"
           className="bg-black text-white p-2 font-bold hover:bg-blue-500 text-xl"

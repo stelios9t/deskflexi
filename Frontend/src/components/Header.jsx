@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import "../styles/components.css";
 import { useAppContext } from "../contexts/AppContext";
 import SignOutButton from "./SignOutButton";
 export default function Header() {

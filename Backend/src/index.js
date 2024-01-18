@@ -7,6 +7,8 @@ import authRoutes from "./routes/auth.js";
 import cookieParser from "cookie-parser";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import myDeskRoutes from "./routes/my-desks.js";
+
 import path from "path";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -31,5 +33,8 @@ app.use(
 app.use(express.static(path.join(__dirname, "../../Frontend/dist")));
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
-
+app.use("/api/my-desks", myDeskRoutes);
+app.get("*", (req, res) => {
+  res.sendFile(path.join(___dirname, "../../Frontend/dist/index.html"));
+});
 app.listen(3000);

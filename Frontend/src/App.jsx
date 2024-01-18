@@ -7,8 +7,12 @@ import {
 } from "react-router-dom";
 import Register from "./pages/Register.jsx";
 import SignIn from "./pages/SignIn.jsx";
+import AddDesk from "./pages/AddDesk.jsx";
 import Layout from "./layouts/Layout.jsx";
+import { useAppContext } from "./contexts/AppContext";
+
 function App() {
+  const { isLoggedIn } = useAppContext();
   return (
     <Router>
       <Routes>
@@ -44,6 +48,18 @@ function App() {
             </Layout>
           }
         />
+        {isLoggedIn && (
+          <>
+            <Route
+              path="/add-desk"
+              element={
+                <Layout>
+                  <AddDesk />
+                </Layout>
+              }
+            />
+          </>
+        )}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>
