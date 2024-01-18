@@ -35,6 +35,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/my-desks", myDeskRoutes);
 app.get("*", (req, res) => {
-  res.sendFile(path.join(___dirname, "../../Frontend/dist/index.html"));
+  res.sendFile(path.join(__dirname, "../../Frontend/dist/index.html"));
 });
 app.listen(3000);
