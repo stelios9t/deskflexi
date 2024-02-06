@@ -35,4 +35,13 @@ router.post(
   }
 );
 
+router.get("/", verifyToken, async (req, res) => {
+  try {
+    const desks = await Desk.find();
+    res.json(desks);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching hotels" });
+  }
+});
+
 export default router;

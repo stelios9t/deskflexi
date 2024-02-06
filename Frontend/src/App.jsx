@@ -10,6 +10,7 @@ import SignIn from "./pages/SignIn.jsx";
 import AddDesk from "./pages/AddDesk.jsx";
 import Layout from "./layouts/Layout.jsx";
 import { useAppContext } from "./contexts/AppContext";
+import MyDesks from "./pages/MyDesks.jsx";
 
 function App() {
   const { isLoggedIn } = useAppContext();
@@ -55,6 +56,14 @@ function App() {
               element={
                 <Layout>
                   <AddDesk />
+                </Layout>
+              }
+            />
+            <Route
+              path="/my-desks"
+              element={
+                <Layout>
+                  <MyDesks />
                 </Layout>
               }
             />

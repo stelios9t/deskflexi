@@ -78,3 +78,13 @@ export const addMyDesk = async (deskFormData) => {
     throw new Error("An unexpected error occurred.");
   }
 };
+
+export const fetchMyDesks = async () => {
+  const response = await fetch(`${API_BASE_URL}/api/my-desks`, {
+    credentials: "include",
+  });
+  if (!response.ok) {
+    throw new Error("Error fetching desks");
+  }
+  return response.json();
+};
