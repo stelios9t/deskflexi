@@ -88,3 +88,37 @@ export const fetchMyDesks = async () => {
   }
   return response.json();
 };
+
+export const fetchDeskById = async (deskId) => {
+  const response = await fetch(`${API_BASE_URL}/api/my-desks/${deskId}`, {
+    credentials: "include",
+  });
+  if (!response.ok) {
+    throw new Error("Error fetching desks");
+  }
+  return response.json();
+};
+
+export const updateDeskById = async (deskFormData) => {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/api/my-desks/${deskFormData.deskId}`, // Assuming deskId is present in deskFormData
+      {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json", // Change content type to JSON
+        },
+        body: JSON.stringify(deskFormData), // Convert deskFormData to JSON
+      }
+    );
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Failed to update desk: ${errorData.message}`);
+    }
+    return response.json();
+  } catch (error) {
+    console.error("Error updating desk:", error);
+    throw new Error("An unexpected error occurred while updating desk.");
+  }
+};

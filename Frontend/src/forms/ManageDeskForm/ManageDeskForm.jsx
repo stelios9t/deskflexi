@@ -1,12 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import DetailsSection from "./DetailsSection";
 import AmenitiesSection from "./AmenitiesSection";
-const ManageDeskForm = ({ onSave, isLoading }) => {
+const ManageDeskForm = ({ onSave, isLoading, desk }) => {
   const formMethods = useForm();
   const { handleSubmit, reset } = formMethods;
+  useEffect(() => {
+    reset(desk);
+  }, [desk, reset]);
 
   const onSubmit = handleSubmit((formDataJson) => {
+    if (desk) {
+      formDataJson.deskId = desk._id;
+    }
     const deskData = {
       deskNumber: formDataJson.deskNumber,
       floor: formDataJson.floor,

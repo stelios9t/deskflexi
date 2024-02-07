@@ -11,6 +11,7 @@ import AddDesk from "./pages/AddDesk.jsx";
 import Layout from "./layouts/Layout.jsx";
 import { useAppContext } from "./contexts/AppContext";
 import MyDesks from "./pages/MyDesks.jsx";
+import EditDesk from "./pages/EditDesk.jsx";
 
 function App() {
   const { isLoggedIn } = useAppContext();
@@ -64,6 +65,14 @@ function App() {
               element={
                 <Layout>
                   <MyDesks />
+                </Layout>
+              }
+            />
+            <Route
+              path="/edit-desk/:deskId"
+              element={
+                <Layout>
+                  <EditDesk />
                 </Layout>
               }
             />

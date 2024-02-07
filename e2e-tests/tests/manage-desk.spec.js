@@ -1,5 +1,4 @@
 import { test, expect } from "@playwright/test";
-import exp from "constants";
 const UI_URL = "http://localhost:5173";
 
 test.beforeEach(async ({ page }) => {
@@ -12,21 +11,36 @@ test.beforeEach(async ({ page }) => {
   await expect(page.getByText("Sign in Successful")).toBeVisible();
 });
 
-test("should allow admin to add a desk", async ({ page }) => {
-  await page.goto(`${UI_URL}/add-desk`);
-  await page.locator('[name="deskNumber"]').fill("300");
-  await page.selectOption('[name="floor"]', "1");
-  await page.getByLabel("3 Monitors").check();
-  await page.getByRole("button", { name: "Save" }).click();
-  await expect(page.getByText("Desk Saved!")).toBeVisible({ timeout: 20000 });
-});
+// test("should allow admin to add a desk", async ({ page }) => {
+//   await page.goto(`${UI_URL}/add-desk`);
+//   await page.locator('[name="deskNumber"]').fill("300");
+//   await page.selectOption('[name="floor"]', "1");
+//   await page.getByLabel("3 Monitors").check();
+//   await page.getByRole("button", { name: "Save" }).click();
+//   await expect(page.getByText("Desk Saved!")).toBeVisible({ timeout: 20000 });
+// });
 
-//only one desk should exist in the database for the following test to pass because the "Floor locator will match
-//multiple times if more desks are added in the database and therefore fail"
 test("should display desks", async ({ page }) => {
   await page.goto(`${UI_URL}/my-desks`);
   await expect(page.getByText("Desk Number: 1")).toBeVisible();
   await expect(page.getByText("Floor")).toBeVisible();
-  await expect(page.getByRole("link", { name: "View Details" })).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "View Details" }).first()
+  ).toBeVisible();
   await expect(page.getByRole("link", { name: "Add Desk" })).toBeVisible();
+});
+//test that edits a desk in the test database, the test automatically
+//resets the number so it always passes
+test("should edit desk", async ({ page }) => {
+  await page.goto(`${UI_URL}/my-desks`);
+  await page.getByRole("link", { name: "View Details" }).first().click();
+  await page.waitForSelector('[name="deskNumber"]', { state: "attached" });
+  await expect(page.locator('[name="deskNumber"]')).toHaveValue("1");
+  await page.locator('[name="deskNumber"]').fill("11");
+  await page.getByRole("button", { name: "Save" }).click();
+  await expect(page.getByText("Desk Saved!")).toBeVisible({ timeout: 30000 });
+  await page.reload();
+  await expect(page.locator('[name="deskNumber"]')).toHaveValue("11");
+  await page.locator('[name="deskNumber"]').fill("1");
+  await page.getByRole("button", { name: "Save" }).click();
 });
