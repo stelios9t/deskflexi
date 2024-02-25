@@ -41,6 +41,7 @@ router.post(
         process.env.JWT_SECRET_KEY,
         { expiresIn: "1d" }
       );
+      // req.user = { ...user.toObject(), role: user.role };
 
       res.cookie("auth_token", token, {
         httpOnly: true,

@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from "react-query";
 import * as apiClient from "../api-client";
 import { useAppContext } from "../contexts/AppContext";
 import { useNavigate } from "react-router-dom";
+
 const Register = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -18,16 +19,16 @@ const Register = () => {
     onSuccess: async () => {
       showToast({ message: "Registration Success", type: "SUCCESS" });
       await queryClient.invalidateQueries("validateToken");
-      //transitions to home page after registration
-      //will be changed to admin home page when the page is created
-      //because only an admin can register a user
       navigate("/");
     },
     onError: (error) => {
       showToast({ message: error.message, type: "ERROR" });
     },
   });
+
   const onSubmit = handleSubmit((data) => {
+    console.log("Form Data:", data); // Log the form data
+
     mutation.mutate(data);
   });
 
@@ -74,11 +75,15 @@ const Register = () => {
         </label>
         <label className="text-gray-700 text-sm font-bold">
           Role
-          <input
-            type="role"
+          <select
             className="border rounded w-full py-1 px-2 font-normal"
             {...register("role", { required: "This field is required" })}
-          />
+          >
+            <option value="">Select Role</option>
+            <option value="IT Admin">IT Admin</option>
+            <option value="Manager">Manager</option>
+            <option value="Software Engineer">Software Engineer</option>
+          </select>
           {errors.role && (
             <span className="text-red-500">{errors.role.message}</span>
           )}

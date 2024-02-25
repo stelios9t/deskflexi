@@ -41,13 +41,20 @@ function App() {
   console.log("userRole:", userRole);
   const isAdmin = userRole === "IT Admin";
   if (isLoading) {
-    // Render a loading indicator here if needed
     return <div>Loading...</div>;
   }
 
   return (
     <Router>
       <Routes>
+        <Route
+          path="/sign-in"
+          element={
+            <Layout>
+              <SignIn />
+            </Layout>
+          }
+        />
         <Route
           path="/"
           element={
@@ -56,6 +63,7 @@ function App() {
             </Layout>
           }
         />
+        //routes for admin only
         {isLoggedIn && isAdmin && (
           <>
             <Route
@@ -84,16 +92,7 @@ function App() {
             />
           </>
         )}
-
-        <Route
-          path="/sign-in"
-          element={
-            <Layout>
-              <SignIn />
-            </Layout>
-          }
-        />
-
+        //routes for all users
         {isLoggedIn && (
           <>
             <Route

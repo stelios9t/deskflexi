@@ -14,9 +14,8 @@ mongoose.connection.on("error", (err) => {
 
 router.post(
   "/register",
-  verifyToken, // Assuming this middleware verifies token
-  checkRole("IT Admin"), // Middleware to check role
-
+  verifyToken,
+  checkRole("IT Admin"),
   [
     check("firstName", "First Name is required").isString(),
     check("lastName", "Last Name is required").isString(),
@@ -26,7 +25,6 @@ router.post(
       min: 6,
     }),
   ],
-
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -34,12 +32,12 @@ router.post(
     }
 
     try {
+      console.log("User in register route:", req.user);
       let user = await User.findOne({ email: req.body.email });
       if (user) {
         throw new HttpError("User already exists", 400);
       }
 
-      // Assuming req.user is populated after the verifyToken middleware
       if (req.user && req.user.role !== "IT Admin") {
         throw new HttpError("Unauthorized. Only IT Admins can register.", 403);
       }
@@ -47,16 +45,7 @@ router.post(
       user = new User(req.body);
       await user.save();
 
-      const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET_KEY, {
-        expiresIn: "1d",
-      });
-      res.cookie("auth_token", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        maxAge: 86400000,
-      });
-
-      return res.status(200).send({ message: "User registered" });
+      return res.status(200).json({ message: "User registered" });
     } catch (error) {
       console.error("Error in user registration:", error);
 
