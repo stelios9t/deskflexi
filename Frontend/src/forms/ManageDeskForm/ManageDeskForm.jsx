@@ -2,21 +2,40 @@ import React, { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import DetailsSection from "./DetailsSection";
 import AmenitiesSection from "./AmenitiesSection";
+
 const ManageDeskForm = ({ onSave, isLoading, desk }) => {
   const formMethods = useForm();
-  const { handleSubmit, reset } = formMethods;
+  const { handleSubmit, reset, setValue } = formMethods;
+
   useEffect(() => {
-    reset(desk);
+    reset(desk); // Reset form fields when desk changes
   }, [desk, reset]);
+
+  useEffect(() => {
+    // When desk amenities change, update checkbox values
+    if (desk && desk.amenities) {
+      const selectedAmenities = {};
+      desk.amenities.forEach((amenity) => {
+        selectedAmenities[amenity] = true;
+      });
+      setValue("amenities", selectedAmenities);
+    }
+  }, [desk, setValue]);
 
   const onSubmit = handleSubmit((formDataJson) => {
     if (desk) {
       formDataJson.deskId = desk._id;
     }
+
+    // Convert checkbox values to array of selected amenities
+    const selectedAmenities = Object.keys(formDataJson.amenities).filter(
+      (key) => formDataJson.amenities[key]
+    );
+
     const deskData = {
       deskNumber: formDataJson.deskNumber,
       floor: formDataJson.floor,
-      amenities: formDataJson.amenities,
+      amenities: selectedAmenities, // Use selected amenities array
     };
 
     onSave(deskData);

@@ -1,3 +1,4 @@
+import React from "react";
 import { useFormContext } from "react-hook-form";
 import { deskAmenities } from "../../config/desk-options-config";
 
@@ -6,6 +7,7 @@ const AmenitiesSection = () => {
     register,
     formState: { errors },
   } = useFormContext();
+
   return (
     <div>
       <h2 className="text-2xl font-bold mb-3">Amenities</h2>
@@ -14,15 +16,7 @@ const AmenitiesSection = () => {
           <label className="text-sm flex gap-1 text-gray-700" key={amenity}>
             <input
               type="checkbox"
-              {...register("amenities", {
-                validate: (amenities) => {
-                  if (amenities && amenities.length > 0) {
-                    return true;
-                  } else {
-                    return "At least one amenity is required";
-                  }
-                },
-              })}
+              {...register(`amenities.${amenity}`, {})} // Use correct name for checkbox
             />
             {amenity}
           </label>

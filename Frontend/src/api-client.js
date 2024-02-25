@@ -37,7 +37,8 @@ export const validateToken = async () => {
   if (!response.ok) {
     throw new Error("Token invalid");
   }
-  return response.json();
+  const body = await response.json();
+  return body;
 };
 
 export const signOut = async () => {
@@ -121,4 +122,27 @@ export const updateDeskById = async (deskFormData) => {
     console.error("Error updating desk:", error);
     throw new Error("An unexpected error occurred while updating desk.");
   }
+};
+
+export const searchDesks = async (searchParams) => {
+  const queryParams = new URLSearchParams();
+  if (searchParams.deskNumber !== "") {
+    queryParams.append("deskNumber", searchParams.deskNumber);
+  }
+
+  queryParams.append("checkIn", searchParams.checkIn || "");
+  queryParams.append("checkOut", searchParams.checkOut || "");
+  queryParams.append("floor", searchParams.floor || "");
+  queryParams.append("page", searchParams.page || "");
+
+  searchParams.amenities?.forEach((amenity) =>
+    queryParams.append("amenities", amenity)
+  );
+  const response = await fetch(
+    `${API_BASE_URL}/api/desks/search?${queryParams}`
+  );
+  if (!response.ok) {
+    throw new Error("Error fetching desks");
+  }
+  return response.json();
 };

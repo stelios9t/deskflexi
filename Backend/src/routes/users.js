@@ -4,6 +4,8 @@ import jwt from "jsonwebtoken";
 import HttpError from "../model/http-error.js";
 import { check, validationResult } from "express-validator";
 import mongoose from "mongoose";
+import verifyToken from "../middleware/auth.js";
+import { checkRole } from "../middleware/checkRole.js";
 
 const router = express.Router();
 mongoose.connection.on("error", (err) => {
@@ -12,6 +14,9 @@ mongoose.connection.on("error", (err) => {
 
 router.post(
   "/register",
+  verifyToken, // Assuming this middleware verifies token
+  checkRole("IT Admin"), // Middleware to check role
+
   [
     check("firstName", "First Name is required").isString(),
     check("lastName", "Last Name is required").isString(),
@@ -21,6 +26,7 @@ router.post(
       min: 6,
     }),
   ],
+
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -28,12 +34,16 @@ router.post(
     }
 
     try {
-      let user = await User.findOne({
-        email: req.body.email,
-      });
+      let user = await User.findOne({ email: req.body.email });
       if (user) {
         throw new HttpError("User already exists", 400);
       }
+
+      // Assuming req.user is populated after the verifyToken middleware
+      if (req.user && req.user.role !== "IT Admin") {
+        throw new HttpError("Unauthorized. Only IT Admins can register.", 403);
+      }
+
       user = new User(req.body);
       await user.save();
 
@@ -45,9 +55,9 @@ router.post(
         secure: process.env.NODE_ENV === "production",
         maxAge: 86400000,
       });
+
       return res.status(200).send({ message: "User registered" });
     } catch (error) {
-      console.log(error);
       console.error("Error in user registration:", error);
 
       if (error instanceof HttpError) {

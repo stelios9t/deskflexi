@@ -20,39 +20,56 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ message: errors.array() });
     }
+
     const { email, password } = req.body;
     try {
       const user = await User.findOne({ email });
       if (!user) {
         throw new HttpError("Invalid credentials", 400);
       }
+
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
         throw new HttpError("Invalid credentials", 400);
       }
-      const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET_KEY, {
-        expiresIn: "1d",
-      });
+
+      // Attach user object to request
+      req.user = user;
+
+      const token = jwt.sign(
+        { userId: user.id, role: user.role },
+        process.env.JWT_SECRET_KEY,
+        { expiresIn: "1d" }
+      );
+
       res.cookie("auth_token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         maxAge: 86400000,
       });
-      res.status(200).json({ userId: user._id });
+
+      res.status(200).json({ userId: user._id, role: user.role });
     } catch (error) {
       console.error(error);
       res
         .status(error.code || 500)
         .json({ message: error.message || "Internal Server Error" });
-      console.log("Email:", req.body.email);
-      console.log("Password:", req.body.password);
     }
   }
 );
 
-router.get("/validate-token", verifyToken, (req, res) => {
-  console.log("Token validated successfully");
-  res.status(200).send({ userId: req.userId });
+router.get("/validate-token", verifyToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    req.user = user; // Attach user object to req
+    res.status(200).json({ userId: user._id, role: user.role });
+  } catch (error) {
+    console.error("Error validating token:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
 });
 
 router.post("/logout", (req, res) => {

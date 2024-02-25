@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import Toast from "../components/Toast";
 import { useQuery } from "react-query";
 import * as apiClient from "../api-client";
@@ -9,8 +9,6 @@ export const AppContextProvider = ({ children }) => {
   const { isError } = useQuery("validateToken", apiClient.validateToken, {
     retry: false,
   });
-
-  console.log("isError:", isError);
 
   return (
     <AppContext.Provider
