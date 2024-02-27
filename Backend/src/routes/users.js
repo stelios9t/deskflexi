@@ -1,13 +1,20 @@
 import express from "express";
 import User from "../model/user.js";
-import jwt from "jsonwebtoken";
 import HttpError from "../model/http-error.js";
 import { check, validationResult } from "express-validator";
 import mongoose from "mongoose";
 import verifyToken from "../middleware/auth.js";
 import { checkRole } from "../middleware/checkRole.js";
-
+import multer from "multer";
+import cloudinary from "cloudinary";
 const router = express.Router();
+const storage = multer.memoryStorage();
+const upload = multer({
+  storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024,
+  },
+});
 mongoose.connection.on("error", (err) => {
   console.error("MongoDB connection error:", err);
 });
@@ -16,6 +23,8 @@ router.post(
   "/register",
   verifyToken,
   checkRole("IT Admin"),
+  upload.array("imageFile", 1),
+
   [
     check("firstName", "First Name is required").isString(),
     check("lastName", "Last Name is required").isString(),
@@ -32,7 +41,6 @@ router.post(
     }
 
     try {
-      console.log("User in register route:", req.user);
       let user = await User.findOne({ email: req.body.email });
       if (user) {
         throw new HttpError("User already exists", 400);
@@ -41,8 +49,16 @@ router.post(
       if (req.user && req.user.role !== "IT Admin") {
         throw new HttpError("Unauthorized. Only IT Admins can register.", 403);
       }
-
+      const imageFile = req.files;
       user = new User(req.body);
+      const uploadPromises = imageFile.map(async (image) => {
+        const b64 = Buffer.from(image.buffer).toString("base64");
+        let dataURI = "data:" + image.mimetype + ";base64," + b64;
+        const res = await cloudinary.v2.uploader.upload(dataURI);
+        return res.url;
+      });
+      const imageUrl = await Promise.all(uploadPromises);
+      user.imageUrl = imageUrl[0]; // Assuming only one image is uploaded
       await user.save();
 
       return res.status(200).json({ message: "User registered" });

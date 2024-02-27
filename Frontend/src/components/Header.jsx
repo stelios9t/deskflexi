@@ -33,7 +33,7 @@ export default function Header() {
   const isAdmin = userRole === "IT Admin";
 
   const adminLinks = [
-    { to: "/admin/users", label: "Users" },
+    { to: "/my-users", label: "Users" },
     { to: "/admin/buildings", label: "Buildings" },
     { to: "/my-desks", label: "Desks" },
     { to: "/admin/conference-rooms", label: "Conference Rooms" },
@@ -41,6 +41,10 @@ export default function Header() {
 
   const handleDropdownToggle = () => {
     setShowDropdown(!showDropdown);
+  };
+
+  const handleDropdownItemClick = () => {
+    setShowDropdown(false);
   };
 
   if (isLoading) {
@@ -76,6 +80,7 @@ export default function Header() {
                         key={link.to}
                         to={link.to}
                         className="block px-4 py-2 hover:bg-gray-800"
+                        onClick={handleDropdownItemClick}
                       >
                         {link.label}
                       </Link>

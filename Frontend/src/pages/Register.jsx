@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from "react-query";
 import * as apiClient from "../api-client";
 import { useAppContext } from "../contexts/AppContext";
 import { useNavigate } from "react-router-dom";
+import ProfileImageSection from "../components/ProfileImageSection";
 
 const Register = () => {
   const queryClient = useQueryClient();
@@ -14,7 +15,11 @@ const Register = () => {
     watch,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      imageFile: null,
+    },
+  });
   const mutation = useMutation(apiClient.register, {
     onSuccess: async () => {
       showToast({ message: "Registration Success", type: "SUCCESS" });
@@ -26,14 +31,28 @@ const Register = () => {
     },
   });
 
-  const onSubmit = handleSubmit((data) => {
-    console.log("Form Data:", data); // Log the form data
+  const onSubmit = handleSubmit(async (data) => {
+    const formData = new FormData();
+    formData.append("firstName", data.firstName);
+    formData.append("lastName", data.lastName);
+    formData.append("email", data.email);
+    formData.append("role", data.role);
+    formData.append("password", data.password);
+    formData.append("confirmPassword", data.confirmPassword);
 
-    mutation.mutate(data);
+    if (data.imageFile && data.imageFile[0]) {
+      formData.append("imageFile", data.imageFile[0]);
+    }
+
+    try {
+      await mutation.mutateAsync(formData);
+      // Handle success, navigate or show message
+    } catch (error) {
+      // Handle error, show error message
+    }
   });
-
   return (
-    <form className="flex flex-col gap-5" onSubmit={onSubmit}>
+    <form className="flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
       <h2 className="text-3xl font-bold">Create an Account</h2>
       <div className="flex flex-col md:flex-row gap-5">
         <div className="flex-1">
@@ -126,6 +145,7 @@ const Register = () => {
             </span>
           )}
         </label>
+        <ProfileImageSection register={register} />
       </div>
       <div className="flex justify-end">
         <button

@@ -4,6 +4,7 @@ import { useQuery } from "react-query";
 import * as apiClient from "../api-client.js";
 import { MdEmail } from "react-icons/md";
 import { BsPersonVcardFill } from "react-icons/bs";
+import defaultImage from "../images/default-image.jpg";
 const MyUsers = () => {
   const { data } = useQuery("fetchMyUsers", apiClient.fetchMyUsers, {
     onError: () => {},
@@ -28,20 +29,35 @@ const MyUsers = () => {
         {data.map((user) => (
           <div
             key={user._id}
-            className="flex flex-col justify-betyween border border-slate-300 rounded-lg p-8 gap-5"
+            className="flex flex-col border border-slate-300 rounded-lg p-8 gap-5"
           >
-            <h2 className="text-2xl font-bold">
-              Name: {user.firstName} {user.lastName}
-            </h2>
-            <div className="grid grid-cols-5 gap-2">
-              <div className=" rounded-sm p-3 flex items-center">
-                <BsPersonVcardFill className="mr-1" />
-                Role: {user.role}
+            <div className="flex items-center">
+              {user.imageUrl ? (
+                <img
+                  src={user.imageUrl}
+                  alt={`${user.firstName} ${user.lastName}`}
+                  className="w-60 h-60 rounded-full mr-4"
+                />
+              ) : (
+                <img
+                  src={defaultImage}
+                  alt="Default Image"
+                  className="w-60 h-60 rounded-full mr-4"
+                />
+              )}
+              <div>
+                <h2 className="text-2xl font-bold">
+                  Name: {user.firstName} {user.lastName}
+                </h2>
+                <div className="rounded-sm p-3 flex items-center">
+                  <BsPersonVcardFill className="mr-1" />
+                  Role: {user.role}
+                </div>
+                <div className="rounded-sm p-3 flex items-center">
+                  <MdEmail className="mr-1" />
+                  Email: {user.email}
+                </div>
               </div>
-            </div>
-            <div className=" rounded-sm p-3 flex items-center">
-              <MdEmail className="mr-1" />
-              Email: {user.email}
             </div>
             <span className="flex justify-end">
               <Link

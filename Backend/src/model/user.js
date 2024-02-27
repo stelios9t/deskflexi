@@ -7,6 +7,8 @@ const userSchema = new mongoose.Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   role: { type: String, required: true },
+  imageUrl: { type: String },
+
   //might be used in the future but currently using the role field
   // userType: {
   //   type: String,
