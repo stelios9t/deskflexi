@@ -146,3 +146,34 @@ export const searchDesks = async (searchParams) => {
   }
   return response.json();
 };
+
+export const searchDesksAdmin = async (searchParams) => {
+  const queryParams = new URLSearchParams();
+  if (searchParams.deskNumber !== "") {
+    queryParams.append("deskNumber", searchParams.deskNumber);
+  }
+
+  queryParams.append("floor", searchParams.floor || "");
+  queryParams.append("page", searchParams.page || "");
+
+  searchParams.amenities?.forEach((amenity) =>
+    queryParams.append("amenities", amenity)
+  );
+  const response = await fetch(
+    `${API_BASE_URL}/api/desks/search?${queryParams}`
+  );
+  if (!response.ok) {
+    throw new Error("Error fetching desks");
+  }
+  return response.json();
+};
+
+export const fetchMyUsers = async () => {
+  const response = await fetch(`${API_BASE_URL}/api/my-users`, {
+    credentials: "include",
+  });
+  if (!response.ok) {
+    throw new Error("Error fetching users");
+  }
+  return response.json();
+};

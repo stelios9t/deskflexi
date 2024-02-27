@@ -2,7 +2,7 @@ import express from "express";
 import Desk from "../model/desk.js";
 import { body } from "express-validator";
 import verifyToken from "../middleware/auth.js";
-import { createCipheriv } from "crypto";
+import { checkRole } from "../middleware/checkRole.js";
 const router = express.Router();
 
 router.post(
@@ -36,12 +36,12 @@ router.post(
   }
 );
 
-router.get("/", verifyToken, async (req, res) => {
+router.get("/", verifyToken, checkRole("IT Admin"), async (req, res) => {
   try {
     const desks = await Desk.find();
     res.json(desks);
   } catch (error) {
-    res.status(500).json({ message: "Error fetching hotels" });
+    res.status(500).json({ message: "Error fetching desks" });
   }
 });
 

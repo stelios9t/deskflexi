@@ -14,6 +14,7 @@ import MyDesks from "./pages/MyDesks.jsx";
 import EditDesk from "./pages/EditDesk.jsx";
 import Search from "./pages/Search.jsx";
 import * as apiClient from "./api-client";
+import MyUsers from "./pages/MyUsers.jsx";
 
 function App() {
   const { isLoggedIn } = useAppContext();
@@ -90,11 +91,6 @@ function App() {
                 </Layout>
               }
             />
-          </>
-        )}
-        //routes for all users
-        {isLoggedIn && (
-          <>
             <Route
               path="/my-desks"
               element={
@@ -103,7 +99,19 @@ function App() {
                 </Layout>
               }
             />
-
+            <Route
+              path="/my-users"
+              element={
+                <Layout>
+                  <MyUsers />
+                </Layout>
+              }
+            />
+          </>
+        )}
+        //routes for all users
+        {isLoggedIn && (
+          <>
             <Route
               path="/search"
               element={

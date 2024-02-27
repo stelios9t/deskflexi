@@ -40,7 +40,6 @@ const Search = () => {
   };
 
   useEffect(() => {
-    // Reset page to 1 when search parameters change
     setPage(1);
   }, [search.deskNumber, search.checkIn, search.checkOut, search.floor]);
 

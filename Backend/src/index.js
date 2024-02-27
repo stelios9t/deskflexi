@@ -10,7 +10,7 @@ import { dirname } from "path";
 import myDeskRoutes from "./routes/my-desks.js";
 import deskRoutes from "./routes/desks.js";
 import path from "path";
-
+import myUserRoutes from "./routes/my-users.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -36,7 +36,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/my-desks", myDeskRoutes);
 app.use("/api/desks", deskRoutes);
-
+app.use("/api/my-users", myUserRoutes);
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../../Frontend/dist/index.html"));
 });
