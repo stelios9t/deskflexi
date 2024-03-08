@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 
-const ProfileImageSection = ({ register }) => {
+const ProfileImageSection = ({ register, defaultImage }) => {
   const {
     formState: { errors },
   } = useForm();
@@ -23,6 +23,7 @@ const ProfileImageSection = ({ register }) => {
               return true;
             },
           })}
+          defaultValue={defaultImage}
         />
       </div>
       {errors.imageFile && (

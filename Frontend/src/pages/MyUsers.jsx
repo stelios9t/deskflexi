@@ -20,7 +20,7 @@ const MyUsers = () => {
         <h1 className="text-3xl font-bold">Users</h1>
         <Link
           to="/register"
-          className="flex bg-black text-white text-xl font-bold p-2 hover:bg-black"
+          className="flex bg-black text-white text-xl font-bold p-2 hover:bg-gray-800"
         >
           Add User
         </Link>
@@ -61,7 +61,7 @@ const MyUsers = () => {
             </div>
             <span className="flex justify-end">
               <Link
-                className="flex bg-black text-white text-xl font-bold p-2 hover:bg-black"
+                className="flex bg-black text-white text-xl font-bold p-2 hover:bg-gray-800"
                 to={`/edit-user/${user._id}`}
               >
                 View Details

@@ -1,5 +1,15 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
 
+export const fetchCurrentUser = async () => {
+  const response = await fetch(`${API_BASE_URL}/api/users/me`, {
+    credentials: "include",
+  });
+  if (!response.ok) {
+    throw new Error("Error fetching user");
+  }
+  return response.json();
+};
+
 export const register = async (formData) => {
   try {
     const response = await fetch(`${API_BASE_URL}/api/users/register`, {
@@ -96,15 +106,15 @@ export const fetchMyDesks = async () => {
   return response.json();
 };
 
-export const fetchDeskById = async (deskId) => {
-  const response = await fetch(`${API_BASE_URL}/api/my-desks/${deskId}`, {
-    credentials: "include",
-  });
-  if (!response.ok) {
-    throw new Error("Error fetching desks");
-  }
-  return response.json();
-};
+// export const fetchDeskById = async (deskId) => {
+//   const response = await fetch(`${API_BASE_URL}/api/my-desks/${deskId}`, {
+//     credentials: "include",
+//   });
+//   if (!response.ok) {
+//     throw new Error("Error fetching desks");
+//   }
+//   return response.json();
+// };
 
 export const updateDeskById = async (deskFormData) => {
   try {
@@ -153,27 +163,6 @@ export const searchDesks = async (searchParams) => {
   return response.json();
 };
 
-export const searchDesksAdmin = async (searchParams) => {
-  const queryParams = new URLSearchParams();
-  if (searchParams.deskNumber !== "") {
-    queryParams.append("deskNumber", searchParams.deskNumber);
-  }
-
-  queryParams.append("floor", searchParams.floor || "");
-  queryParams.append("page", searchParams.page || "");
-
-  searchParams.amenities?.forEach((amenity) =>
-    queryParams.append("amenities", amenity)
-  );
-  const response = await fetch(
-    `${API_BASE_URL}/api/desks/search?${queryParams}`
-  );
-  if (!response.ok) {
-    throw new Error("Error fetching desks");
-  }
-  return response.json();
-};
-
 export const fetchMyUsers = async () => {
   const response = await fetch(`${API_BASE_URL}/api/my-users`, {
     credentials: "include",
@@ -182,4 +171,68 @@ export const fetchMyUsers = async () => {
     throw new Error("Error fetching users");
   }
   return response.json();
+};
+
+export const fetchUserById = async (userId) => {
+  const response = await fetch(`${API_BASE_URL}/api/my-users/${userId}`, {
+    credentials: "include",
+  });
+  if (!response.ok) {
+    throw new Error("Error fetching users");
+  }
+  return response.json();
+};
+
+export const updateUserById = async (formData) => {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/api/my-users/${formData.userId}`, // Use formData.userId
+      {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          role: formData.role,
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Failed to update user: ${errorData.message}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error updating user:", error);
+    throw new Error("An unexpected error occurred while updating user.");
+  }
+};
+export const fetchDeskById = async (deskId) => {
+  const response = await fetch(`${API_BASE_URL}/api/desks/${deskId}`);
+  if (!response.ok) {
+    throw new Error("Error fetching desks");
+  }
+  return response.json();
+};
+export const fetchLoggedInUser = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/auth/validate-token`, {
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch user details");
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
 };

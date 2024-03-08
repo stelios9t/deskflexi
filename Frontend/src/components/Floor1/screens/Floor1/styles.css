@@ -1,0 +1,8 @@
+.property1status {
+  transition: transform 0.3s ease-in-out;
+}
+
+.property1status:hover,
+.property1status.highlighted {
+  transform: scale(1.3);
+}

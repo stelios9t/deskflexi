@@ -19,7 +19,7 @@ const MyDesks = () => {
         <h1 className="text-3xl font-bold">Desks</h1>
         <Link
           to="/add-desk"
-          className="flex bg-black text-white text-xl font-bold p-2 hover:bg-black"
+          className="flex bg-black text-white text-xl font-bold p-2 hover:bg-gray-800"
         >
           Add Desk
         </Link>

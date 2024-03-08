@@ -1,5 +1,6 @@
 import express from "express";
 import Desk from "../model/desk.js";
+import { param, validationResult } from "express-validator";
 const router = express.Router();
 
 router.get("/search", async (req, res) => {
@@ -30,7 +31,24 @@ router.get("/search", async (req, res) => {
     res.status(500).json({ message: "Something went wrong" });
   }
 });
-
+router.get(
+  "/:id",
+  [param("id").notEmpty().withMessage("Desk ID is required")],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const id = req.params.id.toString();
+    try {
+      const desk = await Desk.findById(id);
+      res.json(desk);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Error fetching desk" });
+    }
+  }
+);
 const constructSearchQuery = (queryParams) => {
   let constructedQuery = {};
 

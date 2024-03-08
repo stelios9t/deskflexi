@@ -8,13 +8,6 @@ const userSchema = new mongoose.Schema({
   lastName: { type: String, required: true },
   role: { type: String, required: true },
   imageUrl: { type: String },
-
-  //might be used in the future but currently using the role field
-  // userType: {
-  //   type: String,
-  //   enum: ["Admin", "Employee", "Manager"],
-  //   default: "Employee",
-  // },
 });
 userSchema.pre("save", async function (next) {
   if (this.isModified("password")) {

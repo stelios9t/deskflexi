@@ -8,7 +8,7 @@ const ManageDeskForm = ({ onSave, isLoading, desk }) => {
   const { handleSubmit, reset, setValue } = formMethods;
 
   useEffect(() => {
-    reset(desk); // Reset form fields when desk changes
+    reset(desk);
   }, [desk, reset]);
 
   useEffect(() => {

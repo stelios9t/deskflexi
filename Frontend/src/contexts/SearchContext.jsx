@@ -16,6 +16,14 @@ export const SearchContextProvider = ({ children }) => {
       setDeskId(deskId);
     }
   };
+  const clearSearch = () => {
+    setDeskNumber("");
+    setCheckIn(new Date());
+    setCheckOut(new Date());
+    setFloor(1);
+    setDeskId("");
+  };
+
   return (
     <SearchContext.Provider
       value={{
@@ -25,6 +33,7 @@ export const SearchContextProvider = ({ children }) => {
         floor,
         deskId,
         saveSearchValues,
+        clearSearch,
       }}
     >
       {children}

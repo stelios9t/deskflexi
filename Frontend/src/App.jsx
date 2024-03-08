@@ -15,6 +15,7 @@ import EditDesk from "./pages/EditDesk.jsx";
 import Search from "./pages/Search.jsx";
 import * as apiClient from "./api-client";
 import MyUsers from "./pages/MyUsers.jsx";
+import EditUser from "./pages/EditUser.jsx";
 
 function App() {
   const { isLoggedIn } = useAppContext();
@@ -104,6 +105,14 @@ function App() {
               element={
                 <Layout>
                   <MyUsers />
+                </Layout>
+              }
+            />
+            <Route
+              path="/edit-user/:userId"
+              element={
+                <Layout>
+                  <EditUser />
                 </Layout>
               }
             />

@@ -6,10 +6,12 @@ import SearchResultsCard from "../components/SearchResultsCard";
 import Pagination from "../components/Pagination";
 import AmenitiesFilter from "../components/AmenitiesFilter";
 
+import Floor1 from "../components/Floor1/screens/Floor1/Floor1.jsx";
 const Search = () => {
   const search = useSearchContext();
   const [page, setPage] = useState(1);
   const [selectedAmenities, setSelectedAmenities] = useState([]);
+  const [desks, setDesks] = useState([]);
 
   const searchParams = {
     deskNumber: search.deskNumber,
@@ -22,7 +24,12 @@ const Search = () => {
 
   const { data: deskData, refetch } = useQuery(
     ["searchDesks", searchParams],
-    () => apiClient.searchDesks(searchParams)
+    () => apiClient.searchDesks(searchParams),
+    {
+      onSuccess: (data) => {
+        setDesks(data.data); // Store desks in state
+      },
+    }
   );
 
   const handleAmenityChange = (event) => {
@@ -44,8 +51,8 @@ const Search = () => {
   }, [search.deskNumber, search.checkIn, search.checkOut, search.floor]);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-[250px_1fr] gap-5">
-      <div className="rounded-lg border border-slate-300 p-5 h-fit sticky top-10">
+    <div className="mr-60">
+      {/* <div className="rounded-lg border border-slate-300 p-5 h-fit sticky top-10">
         <div className="space-y-5">
           <h3 className="text-lg font-semibold border-b border-slate-300 pb-5">
             Filter by:
@@ -55,17 +62,19 @@ const Search = () => {
           selectedAmenities={selectedAmenities}
           onChange={handleAmenityChange}
         />
-      </div>
+      </div> */}
       <div className="flex flex-col gap-5">
-        <div className="flex justify-between items-center">
+        {/* <div className="flex justify-between items-center">
           <span className="text-xl font-bold">
             {deskData?.pagination.total} Desks found
             {search.deskNumber ? ` for Desk ${search.deskNumber}` : ""}
           </span>
-        </div>
-        {deskData?.data.map((desk) => (
+        </div> */}
+        {/* {deskData?.data.map((desk) => (
           <SearchResultsCard key={desk._id} desk={desk} />
-        ))}
+        ))} */}
+
+        <Floor1 />
         <div>
           <Pagination
             page={deskData?.pagination.page || 1}
