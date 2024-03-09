@@ -1,6 +1,8 @@
 import express from "express";
 import Desk from "../model/desk.js";
 import { param, validationResult } from "express-validator";
+import verifyToken from "../middleware/auth.js";
+
 const router = express.Router();
 
 router.get("/search", async (req, res) => {
@@ -49,6 +51,13 @@ router.get(
     }
   }
 );
+router.post("/:deskId/bookings", verifyToken, async (req, res) => {
+  try {
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "something went wrong" });
+  }
+});
 const constructSearchQuery = (queryParams) => {
   let constructedQuery = {};
 
