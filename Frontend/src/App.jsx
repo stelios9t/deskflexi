@@ -16,6 +16,7 @@ import Search from "./pages/Search.jsx";
 import * as apiClient from "./api-client";
 import MyUsers from "./pages/MyUsers.jsx";
 import EditUser from "./pages/EditUser.jsx";
+import BookingSideBar from "./components/BookingSideBar.jsx";
 
 function App() {
   const { isLoggedIn } = useAppContext();
@@ -123,6 +124,14 @@ function App() {
           <>
             <Route
               path="/search"
+              element={
+                <Layout isLoggedIn={isLoggedIn}>
+                  <Search />
+                </Layout>
+              }
+            />
+            <Route
+              path="/detail/:deskId"
               element={
                 <Layout isLoggedIn={isLoggedIn}>
                   <Search />

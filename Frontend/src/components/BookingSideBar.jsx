@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Transition } from "@headlessui/react";
 import * as apiClient from "../api-client.js";
+import { useParams } from "react-router-dom";
 
 const BookingSideBar = ({ desk, closeModal }) => {
+  const { deskId } = useParams();
   const [currentUser, setCurrentUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(true);
 
@@ -29,11 +31,11 @@ const BookingSideBar = ({ desk, closeModal }) => {
     <Transition
       show={desk !== null}
       as="div"
-      className="fixed right-0 top-0 h-full w-80 bg-white shadow-lg z-50 overflow-y-auto" // Add overflow-y-auto
-      enter="transition-transform duration-1000 ease-out" // Slower animation
+      className="fixed right-0 top-0 h-full w-80 bg-white shadow-lg z-50 overflow-y-auto"
+      enter="transition-transform duration-1000 ease-out"
       enterFrom="transform translate-x-full"
       enterTo="transform translate-x-0"
-      leave="transition-transform duration-1000 ease-out" // Slower animation
+      leave="transition-transform duration-1000 ease-out"
       leaveFrom="transform translate-x-0"
       leaveTo="transform translate-x-full"
     >

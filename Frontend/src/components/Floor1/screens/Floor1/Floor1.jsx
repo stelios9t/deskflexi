@@ -21,11 +21,16 @@ import { useSearchContext } from "../../../../contexts/SearchContext";
 import "./styles.css";
 import * as apiClient from "../../../../api-client.js";
 import BookingSideBar from "../../../BookingSideBar.jsx";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { useAppContext } from "../../../../contexts/AppContext.jsx";
+
 const Floor1 = () => {
   const [deskDetails, setDeskDetails] = useState(null);
   const [clickedDeskId, setClickedDeskId] = useState(null);
-
+  const navigate = useNavigate();
   const searchContext = useSearchContext();
+  const { showToast } = useAppContext();
   useEffect(() => {
     const searchForDesk = async () => {
       if (searchContext.deskNumber) {
@@ -37,10 +42,16 @@ const Floor1 = () => {
             floor: searchContext.floor.toString(),
           };
           const { data } = await apiClient.searchDesks(searchParams);
-          if (data && data.length > 0) {
+          if (data && data.length === 1) {
+            // Found exactly one desk, navigate to its detail view
+            navigate(`/detail/${data[0]._id}`);
             setDeskDetails(data[0]);
           } else {
             setDeskDetails(null);
+            showToast({
+              message: "Desk number does not exists",
+              type: "ERROR",
+            });
           }
         } catch (error) {
           console.error("Error searching for desks:", error.message);
@@ -57,7 +68,9 @@ const Floor1 = () => {
     searchContext.checkIn,
     searchContext.checkOut,
     searchContext.floor,
+    navigate,
   ]);
+
   const handleDeskClick = async (deskId) => {
     try {
       const deskDetailsData = await apiClient.fetchDeskById(deskId);
@@ -67,21 +80,29 @@ const Floor1 = () => {
       console.error("Error fetching desk details:", error.message);
     }
   };
+  const closeModal = () => {
+    setDeskDetails(null);
+    searchContext.clearSearch();
+    setClickedDeskId(null);
 
+    navigate("/search");
+  };
   return (
     <div className="bg-white flex flex-row justify-center w-full">
       <div className="bg-white w-[1328px] h-[740px]">
         <div className="relative w-[1280px] h-[682px] top-[21px] left-[48px]">
           <div className="absolute w-[248px] h-[115px] top-[49px] left-[318px]">
             <div className="absolute w-[114px] h-[90px] top-[13px] left-[19px] bg-[#f1f0f0] rounded-[25px] -rotate-90" />
-            <CircleStatus
-              onClick={() => handleDeskClick("65a07f48115b7831f3159bd8")}
-              className="!absolute !w-[48px] !h-[53px] !top-[33px] !left-0"
-              isHighlighted={
-                clickedDeskId === "65a07f48115b7831f3159bd8" ||
-                searchContext.deskNumber === "1"
-              }
-            />
+            <Link to={`/detail/65a07f48115b7831f3159bd8`}>
+              <CircleStatus
+                onClick={() => handleDeskClick("65a07f48115b7831f3159bd8")}
+                className="!absolute !w-[48px] !h-[53px] !top-[33px] !left-0"
+                isHighlighted={
+                  clickedDeskId === "65a07f48115b7831f3159bd8" ||
+                  searchContext.deskNumber === "1"
+                }
+              />
+            </Link>
             <div className="absolute w-[114px] h-[91px] top-[12px] left-[116px] bg-[#f1f0f0] rounded-[25px] -rotate-90" />
             <CircleStatus
               onClick={() => handleDeskClick("65a081a3115b7831f3159bda")}
@@ -235,14 +256,7 @@ const Floor1 = () => {
         </div>
       </div>
       {deskDetails && (
-        <BookingSideBar
-          desk={deskDetails}
-          closeModal={() => {
-            setDeskDetails(null);
-            searchContext.clearSearch(); // Call this method to reset the search context
-            setClickedDeskId(null);
-          }}
-        />
+        <BookingSideBar desk={deskDetails} closeModal={closeModal} />
       )}
     </div>
   );
