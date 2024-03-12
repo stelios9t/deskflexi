@@ -2,12 +2,31 @@ import React, { useState, useEffect } from "react";
 import { Transition } from "@headlessui/react";
 import * as apiClient from "../api-client.js";
 import { useParams } from "react-router-dom";
-
+import { useMutation } from "react-query";
+import { useAppContext } from "../contexts/AppContext.jsx";
+import { useSearchContext } from "../contexts/SearchContext.jsx";
 const BookingSideBar = ({ desk, closeModal }) => {
   const { deskId } = useParams();
   const [currentUser, setCurrentUser] = useState(null);
   const [loadingUser, setLoadingUser] = useState(true);
+  const { showToast } = useAppContext();
+  const search = useSearchContext();
 
+  const { mutate: bookDesk, isLoading } = useMutation(
+    apiClient.createDeskBooking,
+    {
+      onSuccess: () => {
+        showToast({ message: "Booking Saved!", type: "SUCCESS" });
+        closeModal();
+      },
+      onError: () => {
+        showToast({
+          message: error.message || "Error saving booking",
+          type: "ERROR",
+        });
+      },
+    }
+  );
   useEffect(() => {
     const fetchCurrentUser = async () => {
       try {
@@ -22,11 +41,20 @@ const BookingSideBar = ({ desk, closeModal }) => {
     fetchCurrentUser();
   }, []);
 
-  // Filter out the "on" value from amenities
   const filteredAmenities = desk.amenities.filter(
     (amenity) => amenity !== "on"
   );
-
+  const handleBookDesk = async (e) => {
+    bookDesk({
+      deskId,
+      userId: currentUser._id,
+      firstName: currentUser.firstName,
+      lastName: currentUser.lastName,
+      email: currentUser.email,
+      checkIn: search.checkIn.toISOString(),
+      checkOut: search.checkOut.toISOString(),
+    });
+  };
   return (
     <Transition
       show={desk !== null}
@@ -97,10 +125,13 @@ const BookingSideBar = ({ desk, closeModal }) => {
         </div>
         <div className="p-4">
           <button
-            onClick={closeModal}
-            className="text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 w-full"
+            onClick={() => {
+              handleBookDesk();
+            }}
+            disabled={isLoading}
+            className="text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 w-full disabled:bg-gray-500"
           >
-            Book this desk
+            {isLoading ? "Saving..." : "Book Desk"}
           </button>
         </div>
       </div>

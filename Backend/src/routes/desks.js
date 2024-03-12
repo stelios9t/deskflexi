@@ -53,6 +53,21 @@ router.get(
 );
 router.post("/:deskId/bookings", verifyToken, async (req, res) => {
   try {
+    const newBooking = {
+      ...req.body,
+      userId: req.userId,
+    };
+    const desk = await Desk.findOneAndUpdate(
+      { _id: req.params.deskId },
+      {
+        $push: { bookings: newBooking },
+      }
+    );
+    if (!desk) {
+      return res.status(400).json({ message: "desk not found" });
+    }
+    await desk.save();
+    res.status(200).send();
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "something went wrong" });
