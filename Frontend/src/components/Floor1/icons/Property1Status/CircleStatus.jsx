@@ -1,11 +1,20 @@
 import React from "react";
 
-export const CircleStatus = ({ className, onClick, isHighlighted = false }) => {
-  const highlightClass = isHighlighted ? "highlighted" : "";
+export const CircleStatus = ({
+  className,
+  onClick,
+  isHighlighted = false,
+  booked = false,
+}) => {
+  // Determine the fill color based on the `booked` and `isHighlighted` props
+  const fillColor = booked ? "#FF0000" : isHighlighted ? "#237025" : "#00D509";
+  const classes = `${className} property1status ${
+    isHighlighted ? "highlighted" : ""
+  }`;
 
   return (
     <svg
-      className={`${className} property1status ${highlightClass}`}
+      className={classes}
       fill="none"
       height="52"
       viewBox="0 0 48 52"
@@ -15,7 +24,7 @@ export const CircleStatus = ({ className, onClick, isHighlighted = false }) => {
     >
       <path
         d="M45 26C45 38.9332 35.3764 49 24 49C12.6236 49 3 38.9332 3 26C3 13.0668 12.6236 3 24 3C35.3764 3 45 13.0668 45 26Z"
-        fill={isHighlighted ? "#237025" : "#00D509"}
+        fill={fillColor} // Use the dynamic fill color based on booking status
         stroke="white"
         strokeWidth="6"
       />

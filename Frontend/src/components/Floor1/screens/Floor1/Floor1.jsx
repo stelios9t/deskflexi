@@ -30,7 +30,51 @@ const Floor1 = () => {
   const [clickedDeskId, setClickedDeskId] = useState(null);
   const navigate = useNavigate();
   const searchContext = useSearchContext();
+  const [deskBookingStatuses, setDeskBookingStatuses] = useState({});
+
   const { showToast } = useAppContext();
+  useEffect(() => {
+    const fetchDesksAndCheckBookingStatus = async () => {
+      const deskIds = ["65a07f48115b7831f3159bd8", "65a081a3115b7831f3159bda"]; // Example desk IDs
+      let statuses = {};
+
+      for (const deskId of deskIds) {
+        try {
+          const deskDetails = await apiClient.fetchDeskById(deskId);
+          const requestedCheckIn = new Date(searchContext.checkIn).setHours(
+            0,
+            0,
+            0,
+            0
+          );
+          const requestedCheckOut = new Date(searchContext.checkOut).setHours(
+            0,
+            0,
+            0,
+            0
+          );
+
+          const isBooked = deskDetails.bookings.some((booking) => {
+            const bookingStart = new Date(booking.checkIn).setHours(0, 0, 0, 0);
+            const bookingEnd = new Date(booking.checkOut).setHours(0, 0, 0, 0);
+            return (
+              requestedCheckIn <= bookingEnd &&
+              requestedCheckOut >= bookingStart
+            );
+          });
+
+          statuses[deskId] = isBooked;
+        } catch (error) {
+          console.error("Error fetching desk details:", error.message);
+        }
+      }
+
+      setDeskBookingStatuses(statuses);
+    };
+
+    fetchDesksAndCheckBookingStatus();
+  }, [searchContext.checkIn, searchContext.checkOut]); // Add other dependencies as necessary
+
   useEffect(() => {
     const searchForDesk = async () => {
       if (searchContext.deskNumber) {
@@ -101,17 +145,21 @@ const Floor1 = () => {
                   clickedDeskId === "65a07f48115b7831f3159bd8" ||
                   searchContext.deskNumber === "1"
                 }
+                booked={deskBookingStatuses["65a07f48115b7831f3159bd8"]}
               />
             </Link>
             <div className="absolute w-[114px] h-[91px] top-[12px] left-[116px] bg-[#f1f0f0] rounded-[25px] -rotate-90" />
-            <CircleStatus
-              onClick={() => handleDeskClick("65a081a3115b7831f3159bda")}
-              className="!absolute !w-[48px] !h-[53px] !top-[28px] !left-[193px]"
-              isHighlighted={
-                clickedDeskId === "65a081a3115b7831f3159bda" ||
-                searchContext.deskNumber === "2"
-              }
-            />
+            <Link to={`/detail/65a081a3115b7831f3159bda`}>
+              <CircleStatus
+                onClick={() => handleDeskClick("65a081a3115b7831f3159bda")}
+                className="!absolute !w-[48px] !h-[53px] !top-[28px] !left-[193px]"
+                isHighlighted={
+                  clickedDeskId === "65a081a3115b7831f3159bda" ||
+                  searchContext.deskNumber === "2"
+                }
+                booked={deskBookingStatuses["65a081a3115b7831f3159bda"]}
+              />
+            </Link>
           </div>
           <div className="absolute w-[241px] h-[115px] top-[185px] left-[318px]">
             <div className="absolute w-[114px] h-[90px] top-[13px] left-[19px] bg-[#f1f0f0] rounded-[25px] -rotate-90" />

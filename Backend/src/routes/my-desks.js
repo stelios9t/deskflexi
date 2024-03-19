@@ -8,6 +8,7 @@ const router = express.Router();
 router.post(
   "/",
   verifyToken,
+  checkRole("IT ADMIN"),
   [
     body("deskNumber").notEmpty().isNumeric().withMessage("Number is required"),
     body("floor").notEmpty().isNumeric().withMessage("Floor is required"),
@@ -45,7 +46,7 @@ router.get("/", verifyToken, checkRole("IT Admin"), async (req, res) => {
   }
 });
 
-router.get("/:id", verifyToken, async (req, res) => {
+router.get("/:id", checkRole("IT ADMIN"), verifyToken, async (req, res) => {
   const id = req.params.id.toString();
   try {
     const desk = await Desk.findOne({
@@ -57,7 +58,7 @@ router.get("/:id", verifyToken, async (req, res) => {
   }
 });
 
-router.put("/:deskId", verifyToken, async (req, res) => {
+router.put("/:deskId", checkRole("IT ADMIN"), verifyToken, async (req, res) => {
   try {
     const updatedDesk = req.body;
     updatedDesk.lastUpdated = new Date();

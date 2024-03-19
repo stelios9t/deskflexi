@@ -53,26 +53,68 @@ router.get(
 );
 router.post("/:deskId/bookings", verifyToken, async (req, res) => {
   try {
-    const newBooking = {
-      ...req.body,
-      userId: req.userId,
+    const { checkIn, checkOut, firstName, lastName, email } = req.body;
+    const deskId = req.params.deskId;
+    const userId = req.userId;
+
+    const toMidnight = (date) => {
+      const newDate = new Date(date);
+      newDate.setHours(0, 0, 0, 0);
+      return newDate;
     };
-    const desk = await Desk.findOneAndUpdate(
-      { _id: req.params.deskId },
-      {
-        $push: { bookings: newBooking },
-      }
-    );
-    if (!desk) {
-      return res.status(400).json({ message: "desk not found" });
+
+    const requestedCheckIn = toMidnight(checkIn);
+    const requestedCheckOut = toMidnight(checkOut);
+
+    // Since we only care about dates (not times), ensure checkOut is at least the day after checkIn
+    requestedCheckOut.setDate(requestedCheckOut.getDate() + 1);
+
+    // Check for any existing booking by this user on the specified date across all desks
+    const existingBooking = await Desk.findOne({
+      bookings: {
+        $elemMatch: {
+          userId: userId,
+          $or: [
+            { checkIn: { $lte: requestedCheckOut, $gte: requestedCheckIn } },
+            { checkOut: { $gte: requestedCheckIn, $lte: requestedCheckOut } },
+          ],
+        },
+      },
+    });
+
+    if (existingBooking) {
+      return res
+        .status(400)
+        .json({ message: "You have already booked a desk for this date." });
     }
-    await desk.save();
-    res.status(200).send();
+
+    const newBooking = {
+      userId,
+      firstName,
+      lastName,
+      email,
+      checkIn: requestedCheckIn,
+      checkOut: requestedCheckOut,
+    };
+    const desk = await Desk.findByIdAndUpdate(
+      deskId,
+      { $push: { bookings: newBooking } },
+      { new: true, runValidators: true }
+    );
+
+    if (!desk) {
+      return res.status(400).json({ message: "Desk not found" });
+    }
+
+    res.status(200).json(desk);
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "something went wrong" });
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "Something went wrong during the booking process." });
   }
 });
+
 const constructSearchQuery = (queryParams) => {
   let constructedQuery = {};
 

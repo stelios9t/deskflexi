@@ -52,6 +52,8 @@ const Search = () => {
 
   return (
     <div className="mr-60">
+      {/* amenities filter selection and old search results card
+      amenities will be implemented in the future, card is being kept for future reference */}
       {/* <div className="rounded-lg border border-slate-300 p-5 h-fit sticky top-10">
         <div className="space-y-5">
           <h3 className="text-lg font-semibold border-b border-slate-300 pb-5">

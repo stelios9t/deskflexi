@@ -249,6 +249,7 @@ export const createDeskBooking = async (formData) => {
     }
   );
   if (!response.ok) {
-    throw new Error("Error booking desk");
+    const errorBody = await response.json();
+    throw new Error(errorBody.message || "Error booking desk");
   }
 };

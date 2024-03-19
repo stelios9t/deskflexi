@@ -14,7 +14,7 @@ router.get("/", verifyToken, checkRole("IT Admin"), async (req, res) => {
   }
 });
 
-router.get("/:id", verifyToken, async (req, res) => {
+router.get("/:id", checkRole("IT ADMIN"), verifyToken, async (req, res) => {
   const id = req.params.id.toString();
   try {
     const user = await User.findOne({
