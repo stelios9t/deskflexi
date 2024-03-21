@@ -16,7 +16,6 @@ import Search from "./pages/Search.jsx";
 import * as apiClient from "./api-client";
 import MyUsers from "./pages/MyUsers.jsx";
 import EditUser from "./pages/EditUser.jsx";
-import BookingSideBar from "./components/BookingSideBar.jsx";
 
 function App() {
   const { isLoggedIn } = useAppContext();
@@ -66,7 +65,7 @@ function App() {
             </Layout>
           }
         />
-        //routes for admin only
+        /{/* routes for admin only */}
         {isLoggedIn && isAdmin && (
           <>
             <Route
@@ -119,7 +118,7 @@ function App() {
             />
           </>
         )}
-        //routes for all users
+        {/* routes for all users */}
         {isLoggedIn && (
           <>
             <Route

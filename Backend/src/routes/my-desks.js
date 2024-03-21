@@ -8,7 +8,7 @@ const router = express.Router();
 router.post(
   "/",
   verifyToken,
-  checkRole("IT ADMIN"),
+
   [
     body("deskNumber").notEmpty().isNumeric().withMessage("Number is required"),
     body("floor").notEmpty().isNumeric().withMessage("Floor is required"),
@@ -36,17 +36,32 @@ router.post(
     }
   }
 );
-
-router.get("/", verifyToken, checkRole("IT Admin"), async (req, res) => {
+router.get("/", verifyToken, async (req, res) => {
   try {
-    const desks = await Desk.find();
-    res.json(desks);
+    const pageSize = 10; // Define how many items you want per page
+    const pageNumber = parseInt(
+      req.query.page ? req.query.page.toString() : "1"
+    ); // Get the page number from query parameters or default to 1
+    const skip = (pageNumber - 1) * pageSize; // Calculate the number of documents to skip
+
+    const desks = await Desk.find().skip(skip).limit(pageSize); // Apply pagination
+    const total = await Desk.countDocuments(); // Count the total documents
+
+    // Return desks along with pagination details
+    res.json({
+      data: desks,
+      pagination: {
+        total,
+        page: pageNumber,
+        pages: Math.ceil(total / pageSize),
+      },
+    });
   } catch (error) {
     res.status(500).json({ message: "Error fetching desks" });
   }
 });
 
-router.get("/:id", checkRole("IT ADMIN"), verifyToken, async (req, res) => {
+router.get("/:id", verifyToken, async (req, res) => {
   const id = req.params.id.toString();
   try {
     const desk = await Desk.findOne({
@@ -58,7 +73,7 @@ router.get("/:id", checkRole("IT ADMIN"), verifyToken, async (req, res) => {
   }
 });
 
-router.put("/:deskId", checkRole("IT ADMIN"), verifyToken, async (req, res) => {
+router.put("/:deskId", verifyToken, async (req, res) => {
   try {
     const updatedDesk = req.body;
     updatedDesk.lastUpdated = new Date();

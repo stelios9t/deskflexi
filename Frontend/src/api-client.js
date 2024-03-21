@@ -96,8 +96,8 @@ export const addMyDesk = async (deskFormData) => {
   }
 };
 
-export const fetchMyDesks = async () => {
-  const response = await fetch(`${API_BASE_URL}/api/my-desks`, {
+export const fetchMyDesks = async (page = 1) => {
+  const response = await fetch(`${API_BASE_URL}/api/my-desks?page=${page}`, {
     credentials: "include",
   });
   if (!response.ok) {
@@ -149,7 +149,7 @@ export const searchDesks = async (searchParams) => {
   queryParams.append("checkIn", searchParams.checkIn || "");
   queryParams.append("checkOut", searchParams.checkOut || "");
   queryParams.append("floor", searchParams.floor || "");
-  queryParams.append("page", searchParams.page || "");
+  // queryParams.append("page", searchParams.page || "");
 
   searchParams.amenities?.forEach((amenity) =>
     queryParams.append("amenities", amenity)
@@ -163,8 +163,8 @@ export const searchDesks = async (searchParams) => {
   return response.json();
 };
 
-export const fetchMyUsers = async () => {
-  const response = await fetch(`${API_BASE_URL}/api/my-users`, {
+export const fetchMyUsers = async (page = 1) => {
+  const response = await fetch(`${API_BASE_URL}/api/my-users?page=${page}`, {
     credentials: "include",
   });
   if (!response.ok) {

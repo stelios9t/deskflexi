@@ -1,20 +1,32 @@
 import express from "express";
-import { body } from "express-validator";
 import User from "../model/user.js";
 import verifyToken from "../middleware/auth.js";
-import { checkRole } from "../middleware/checkRole.js";
 const router = express.Router();
 
-router.get("/", verifyToken, checkRole("IT Admin"), async (req, res) => {
+router.get("/", verifyToken, async (req, res) => {
   try {
-    const users = await User.find();
-    res.json(users);
+    const pageSize = 5; // Define how many items you want per page
+    const pageNumber = parseInt(
+      req.query.page ? req.query.page.toString() : "1"
+    ); // Get the page number from query parameters or default to 1
+    const skip = (pageNumber - 1) * pageSize; // Calculate the number of documents to skip
+
+    const users = await User.find().skip(skip).limit(pageSize);
+    const total = await User.countDocuments();
+    res.json({
+      data: users,
+      pagination: {
+        total,
+        page: pageNumber,
+        pages: Math.ceil(total / pageSize),
+      },
+    });
   } catch (error) {
     res.status(500).json({ message: "Error fetching users" });
   }
 });
 
-router.get("/:id", checkRole("IT ADMIN"), verifyToken, async (req, res) => {
+router.get("/:id", verifyToken, async (req, res) => {
   const id = req.params.id.toString();
   try {
     const user = await User.findOne({

@@ -35,7 +35,26 @@ const Floor1 = () => {
   const { showToast } = useAppContext();
   useEffect(() => {
     const fetchDesksAndCheckBookingStatus = async () => {
-      const deskIds = ["65a07f48115b7831f3159bd8", "65a081a3115b7831f3159bda"]; // Example desk IDs
+      const deskIds = [
+        "65a07f48115b7831f3159bd8",
+        "65a081a3115b7831f3159bda",
+        "65a08294887a3d9fbafa757f",
+        "65a0835d09608f2807261722",
+        "65a0d1727f4b053a98843063",
+        "65a9a7f4a1eb2ae59b6a9a7a",
+        "65a9a85aa1eb2ae59b6a9a7c",
+        "65a9b4f145ab9528aadbb1b3",
+        "65aa516fd3936b23cca320e9",
+        "65aa6267322f4036e5a32b7b",
+        "65c27ca43b5db922c67edaf8",
+        "65c3df23ee51fb98ffa81d7e",
+        "65c61204135b27229cdbde8d",
+        "65d5f3cac19e4599d44374b5",
+        "65de12d669d7ce6d86d1e11e",
+        "65fae2958459d17e640a076e",
+        "65fae2a68459d17e640a0773",
+        "65fae2ad8459d17e640a0775",
+      ];
       let statuses = {};
 
       for (const deskId of deskIds) {
@@ -163,45 +182,188 @@ const Floor1 = () => {
           </div>
           <div className="absolute w-[241px] h-[115px] top-[185px] left-[318px]">
             <div className="absolute w-[114px] h-[90px] top-[13px] left-[19px] bg-[#f1f0f0] rounded-[25px] -rotate-90" />
-            <CircleStatus className="!absolute !w-[48px] !h-[53px] !top-[31px] !left-0" />
+            <Link to={`/detail/65a08294887a3d9fbafa757f`}>
+              <CircleStatus
+                className="!absolute !w-[48px] !h-[53px] !top-[31px] !left-0"
+                isHighlighted={
+                  clickedDeskId === "65a08294887a3d9fbafa757f" ||
+                  searchContext.deskNumber === "3"
+                }
+                booked={deskBookingStatuses["65a08294887a3d9fbafa757f"]}
+                onClick={() => handleDeskClick("65a08294887a3d9fbafa757f")}
+              />
+            </Link>
             <div className="absolute w-[114px] h-[91px] top-[12px] left-[116px] bg-[#f1f0f0] rounded-[25px] -rotate-90" />
-            <CircleStatus className="!absolute !w-[48px] !h-[53px] !top-[31px] !left-[193px]" />
+
+            <Link to={`/detail/65a0835d09608f2807261722`}>
+              <CircleStatus
+                className="!absolute !w-[48px] !h-[53px] !top-[31px] !left-[193px]"
+                isHighlighted={
+                  clickedDeskId === "65a0835d09608f2807261722" ||
+                  searchContext.deskNumber === "4"
+                }
+                booked={deskBookingStatuses["65a0835d09608f2807261722"]}
+                onClick={() => handleDeskClick("65a0835d09608f2807261722")}
+              />
+            </Link>
           </div>
           <div className="absolute w-[241px] h-[115px] top-[312px] left-[318px]">
             <div className="absolute w-[114px] h-[90px] top-[13px] left-[19px] bg-[#f1f0f0] rounded-[25px] -rotate-90" />
             <div className="absolute w-[114px] h-[91px] top-[12px] left-[116px] bg-[#f1f0f0] rounded-[25px] -rotate-90" />
-            <CircleStatus className="!absolute !w-[48px] !h-[52px] !top-[31px] !left-[193px]" />
-            <CircleStatus className="!absolute !w-[48px] !h-[53px] !top-[31px] !left-0" />
+
+            <Link to={`/detail/65a9a7f4a1eb2ae59b6a9a7a`}>
+              <CircleStatus
+                className="!absolute !w-[48px] !h-[52px] !top-[31px] !left-[193px]"
+                isHighlighted={
+                  clickedDeskId === "65a9a7f4a1eb2ae59b6a9a7a" ||
+                  searchContext.deskNumber === "6"
+                }
+                booked={deskBookingStatuses["65a9a7f4a1eb2ae59b6a9a7a"]}
+                onClick={() => handleDeskClick("65a9a7f4a1eb2ae59b6a9a7a")}
+              />
+            </Link>
+            <Link to={`/detail/65a0d1727f4b053a98843063`}>
+              <CircleStatus
+                className="!absolute !w-[48px] !h-[53px] !top-[31px] !left-0"
+                isHighlighted={
+                  clickedDeskId === "65a0d1727f4b053a98843063" ||
+                  searchContext.deskNumber === "5"
+                }
+                booked={deskBookingStatuses["65a0d1727f4b053a98843063"]}
+                onClick={() => handleDeskClick("65a0d1727f4b053a98843063")}
+              />
+            </Link>
           </div>
           <div className="absolute w-[241px] h-[115px] top-[448px] left-[318px]">
             <div className="absolute w-[114px] h-[90px] top-[13px] left-[19px] bg-[#f1f0f0] rounded-[25px] -rotate-90" />
-            <CircleStatus className="!absolute !w-[48px] !h-[52px] !top-[31px] !left-0" />
+
+            <Link to={`/detail/65a9a85aa1eb2ae59b6a9a7c`}>
+              <CircleStatus
+                className="!absolute !w-[48px] !h-[53px] !top-[31px] !left-0"
+                isHighlighted={
+                  clickedDeskId === "65a9a85aa1eb2ae59b6a9a7c" ||
+                  searchContext.deskNumber === "7"
+                }
+                booked={deskBookingStatuses["65a9a85aa1eb2ae59b6a9a7c"]}
+                onClick={() => handleDeskClick("65a9a85aa1eb2ae59b6a9a7c")}
+              />
+            </Link>
             <div className="absolute w-[114px] h-[91px] top-[12px] left-[116px] bg-[#f1f0f0] rounded-[25px] -rotate-90" />
-            <CircleStatus className="!absolute !w-[48px] !h-[52px] !top-[31px] !left-[193px]" />
+            <Link to={`/detail/65a9b4f145ab9528aadbb1b3`}>
+              <CircleStatus
+                className="!absolute !w-[48px] !h-[52px] !top-[31px] !left-[193px]"
+                isHighlighted={
+                  clickedDeskId === "65a9b4f145ab9528aadbb1b3" ||
+                  searchContext.deskNumber === "8"
+                }
+                booked={deskBookingStatuses["65a9b4f145ab9528aadbb1b3"]}
+                onClick={() => handleDeskClick("65a9b4f145ab9528aadbb1b3")}
+              />
+            </Link>
           </div>
           <div className="absolute w-[241px] h-[115px] top-[50px] left-[610px]">
             <div className="absolute w-[114px] h-[90px] top-[13px] left-[19px] bg-[#f1f0f0] rounded-[25px] -rotate-90" />
-            <CircleStatus className="!absolute !w-[48px] !h-[53px] !top-[33px] !left-0" />
+            <Link to={`/detail/65aa516fd3936b23cca320e9`}>
+              <CircleStatus
+                className="!absolute !w-[48px] !h-[53px] !top-[33px] !left-0"
+                isHighlighted={
+                  clickedDeskId === "65aa516fd3936b23cca320e9" ||
+                  searchContext.deskNumber === "9"
+                }
+                booked={deskBookingStatuses["65aa516fd3936b23cca320e9"]}
+                onClick={() => handleDeskClick("65aa516fd3936b23cca320e9")}
+              />
+            </Link>
             <div className="absolute w-[114px] h-[91px] top-[12px] left-[116px] bg-[#f1f0f0] rounded-[25px] -rotate-90" />
-            <CircleStatus className="!absolute !w-[48px] !h-[53px] !top-[33px] !left-[193px]" />
+            <Link to={`/detail/65aa6267322f4036e5a32b7b`}>
+              <CircleStatus
+                className="!absolute !w-[48px] !h-[53px] !top-[33px] !left-[193px]"
+                isHighlighted={
+                  clickedDeskId === "65aa6267322f4036e5a32b7b" ||
+                  searchContext.deskNumber === "10"
+                }
+                booked={deskBookingStatuses["65aa6267322f4036e5a32b7b"]}
+                onClick={() => handleDeskClick("65aa6267322f4036e5a32b7b")}
+              />
+            </Link>
           </div>
           <div className="absolute w-[241px] h-[114px] top-[187px] left-[610px]">
             <div className="absolute w-[114px] h-[90px] top-[12px] left-[19px] bg-[#f1f0f0] rounded-[25px] -rotate-90" />
-            <CircleStatus className="!absolute !w-[48px] !h-[53px] !top-[30px] !left-0" />
+            <Link to={`/detail/65c27ca43b5db922c67edaf8`}>
+              <CircleStatus
+                className="!absolute !w-[48px] !h-[53px] !top-[30px] !left-0"
+                isHighlighted={
+                  clickedDeskId === "65c27ca43b5db922c67edaf8" ||
+                  searchContext.deskNumber === "11"
+                }
+                booked={deskBookingStatuses["65c27ca43b5db922c67edaf8"]}
+                onClick={() => handleDeskClick("65c27ca43b5db922c67edaf8")}
+              />
+            </Link>
             <div className="absolute w-[114px] h-[90px] top-[12px] left-[115px] bg-[#f1f0f0] rounded-[25px] -rotate-90" />
-            <CircleStatus className="!absolute !w-[48px] !h-[53px] !top-[30px] !left-[193px]" />
+            <Link to={`/detail/65c3df23ee51fb98ffa81d7e`}>
+              <CircleStatus
+                className="!absolute !w-[48px] !h-[53px] !top-[30px] !left-[193px]"
+                isHighlighted={
+                  clickedDeskId === "65c3df23ee51fb98ffa81d7e" ||
+                  searchContext.deskNumber === "12"
+                }
+                booked={deskBookingStatuses["65c3df23ee51fb98ffa81d7e"]}
+                onClick={() => handleDeskClick("65c3df23ee51fb98ffa81d7e")}
+              />
+            </Link>
           </div>
           <div className="absolute w-[241px] h-[118px] top-[314px] left-[610px]">
             <div className="absolute w-[114px] h-[90px] top-[12px] left-[19px] bg-[#f1f0f0] rounded-[25px] -rotate-90" />
             <div className="absolute w-[114px] h-[90px] top-[16px] left-[116px] bg-[#f1f0f0] rounded-[25px] -rotate-90" />
-            <CircleStatus className="!absolute !w-[48px] !h-[53px] !top-[29px] !left-[193px]" />
-            <CircleStatus className="!absolute !w-[48px] !h-[53px] !top-[30px] !left-0" />
+            <Link to={`/detail/65d5f3cac19e4599d44374b5`}>
+              <CircleStatus
+                className="!absolute !w-[48px] !h-[53px] !top-[29px] !left-[193px]"
+                isHighlighted={
+                  clickedDeskId === "65d5f3cac19e4599d44374b5" ||
+                  searchContext.deskNumber === "14"
+                }
+                booked={deskBookingStatuses["65d5f3cac19e4599d44374b5"]}
+                onClick={() => handleDeskClick("65d5f3cac19e4599d44374b5")}
+              />
+            </Link>
+            <Link to={`/detail/65c61204135b27229cdbde8d`}>
+              <CircleStatus
+                className="!absolute !w-[48px] !h-[53px] !top-[30px] !left-0"
+                isHighlighted={
+                  clickedDeskId === "65c61204135b27229cdbde8d" ||
+                  searchContext.deskNumber === "13"
+                }
+                booked={deskBookingStatuses["65c61204135b27229cdbde8d"]}
+                onClick={() => handleDeskClick("65c61204135b27229cdbde8d")}
+              />
+            </Link>
           </div>
           <div className="absolute w-[241px] h-[114px] top-[450px] left-[610px]">
             <div className="absolute w-[114px] h-[90px] top-[12px] left-[19px] bg-[#f1f0f0] rounded-[25px] -rotate-90" />
             <div className="absolute w-[114px] h-[90px] top-[12px] left-[116px] bg-[#f1f0f0] rounded-[25px] -rotate-90" />
-            <CircleStatus className="!absolute !w-[48px] !h-[52px] !top-[30px] !left-0" />
-            <CircleStatus className="!absolute !w-[48px] !h-[52px] !top-[30px] !left-[193px]" />
+            <Link to={`/detail/65de12d669d7ce6d86d1e11e`}>
+              <CircleStatus
+                className="!absolute !w-[48px] !h-[52px] !top-[30px] !left-0"
+                isHighlighted={
+                  clickedDeskId === "65de12d669d7ce6d86d1e11e" ||
+                  searchContext.deskNumber === "15"
+                }
+                booked={deskBookingStatuses["65de12d669d7ce6d86d1e11e"]}
+                onClick={() => handleDeskClick("65de12d669d7ce6d86d1e11e")}
+              />
+            </Link>
+            <Link to={`/detail/65fae2958459d17e640a076e`}>
+              <CircleStatus
+                className="!absolute !w-[48px] !h-[52px] !top-[30px] !left-[193px]"
+                isHighlighted={
+                  clickedDeskId === "65fae2958459d17e640a076e" ||
+                  searchContext.deskNumber === "16"
+                }
+                booked={deskBookingStatuses["65fae2958459d17e640a076e"]}
+                onClick={() => handleDeskClick("65fae2958459d17e640a076e")}
+              />
+            </Link>
           </div>
           <div className="absolute w-[263px] top-[322px] left-[1103px] rotate-[-90.00deg] [font-family:'Inter',Helvetica] font-normal text-[#f1f0f0] text-[36px] text-center tracking-[0] leading-[normal]">
             ENTRANCE
@@ -268,9 +430,20 @@ const Floor1 = () => {
             src={wall8}
           />
           <div className="absolute w-[200px] h-[145px] top-[143px] left-[23px] bg-[#f1f0f0] rounded-[300px] rotate-[-98.78deg]" />
+          {/* conference room */}
           <CircleStatus className="!absolute !w-[48px] !h-[52px] !top-[96px] !left-[80px]" />
           <div className="absolute w-[114px] h-[90px] top-[353px] left-[119px] bg-[#f1f0f0] rounded-[25px] rotate-[-98.78deg]" />
-          <CircleStatus className="!absolute !w-[59px] !h-[55px] !top-[370px] !left-[94px]" />
+          <Link to={`/detail/65fae2a68459d17e640a0773`}>
+            <CircleStatus
+              className="!absolute !w-[59px] !h-[55px] !top-[370px] !left-[94px]"
+              isHighlighted={
+                clickedDeskId === "65fae2a68459d17e640a0773" ||
+                searchContext.deskNumber === "17"
+              }
+              booked={deskBookingStatuses["65fae2a68459d17e640a0773"]}
+              onClick={() => handleDeskClick("65fae2a68459d17e640a0773")}
+            />
+          </Link>
 
           <img
             className="absolute w-[5px] h-[106px] top-[500px] left-[1131px]"
@@ -299,7 +472,17 @@ const Floor1 = () => {
           />
           <div className="absolute w-[135px] h-[126px] top-[541px] left-[108px]">
             <div className="absolute w-[114px] h-[90px] top-[18px] left-[25px] bg-[#f1f0f0] rounded-[25px] rotate-[-98.78deg]" />
-            <CircleStatus className="!absolute !w-[59px] !h-[55px] !top-[46px] !left-0" />
+            <Link to={`/detail/65fae2ad8459d17e640a0775`}>
+              <CircleStatus
+                className="!absolute !w-[59px] !h-[55px] !top-[46px] !left-0"
+                isHighlighted={
+                  clickedDeskId === "65fae2ad8459d17e640a0775" ||
+                  searchContext.deskNumber === "18"
+                }
+                booked={deskBookingStatuses["65fae2ad8459d17e640a0775"]}
+                onClick={() => handleDeskClick("65fae2ad8459d17e640a0775")}
+              />
+            </Link>
           </div>
         </div>
       </div>

@@ -16,7 +16,7 @@ const AmenitiesSection = () => {
           <label className="text-sm flex gap-1 text-gray-700" key={amenity}>
             <input
               type="checkbox"
-              {...register(`amenities.${amenity}`, {})} // Use correct name for checkbox
+              {...register(`amenities.${amenity}`)} // Use correct name for checkbox
             />
             {amenity}
           </label>

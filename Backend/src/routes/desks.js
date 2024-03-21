@@ -7,32 +7,14 @@ const router = express.Router();
 
 router.get("/search", async (req, res) => {
   try {
-    console.log("Received query parameters:", req.query); // Log the received query parameters
     const query = constructSearchQuery(req.query);
-    console.log("Constructed query:", query); // Log the constructed query
-
-    const pageSize = 5;
-    const pageNumber = parseInt(
-      req.query.page ? req.query.page.toString() : "1"
-    );
-    const skip = (pageNumber - 1) * pageSize;
-
-    const desks = await Desk.find(query).skip(skip).limit(pageSize);
-    const total = await Desk.countDocuments(query);
-    const response = {
-      data: desks,
-      pagination: {
-        total,
-        page: pageNumber,
-        pages: Math.ceil(total / pageSize),
-      },
-    };
-    res.json(response);
+    const desks = await Desk.find(query); // Removed skip and limit for pagination
+    res.json({ data: desks }); // Simplified response, no pagination info
   } catch (error) {
-    console.log("error", error);
     res.status(500).json({ message: "Something went wrong" });
   }
 });
+
 router.get(
   "/:id",
   [param("id").notEmpty().withMessage("Desk ID is required")],

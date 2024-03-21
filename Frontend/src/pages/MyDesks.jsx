@@ -1,15 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
 import * as apiClient from "../api-client";
 import { FaRegBuilding } from "react-icons/fa";
+import Pagination from "../components/Pagination";
 
 const MyDesks = () => {
-  const { data } = useQuery("fetchMyDesks", apiClient.fetchMyDesks, {
-    onError: () => {},
-  });
+  const [currentPage, setCurrentPage] = useState(1);
 
-  if (!data) {
+  const { data, error, isLoading, isError } = useQuery(
+    ["fetchMyDesks", currentPage],
+    () => apiClient.fetchMyDesks(currentPage),
+    {
+      keepPreviousData: true,
+    }
+  );
+
+  if (isLoading) {
+    return <span>Loading...</span>;
+  }
+
+  if (isError) {
+    return <span>Error: {error.message}</span>;
+  }
+
+  if (!data || !data.data || data.data.length === 0) {
     return <span>No desks found</span>;
   }
 
@@ -25,18 +40,17 @@ const MyDesks = () => {
         </Link>
       </span>
       <div className="grid grid-cols-2 gap-8">
-        {data.map((desk) => (
+        {data.data.map((desk) => (
           <div
             key={desk._id}
-            className="flex flex-col justify-betyween border border-slate-300 rounded-lg p-8 gap-5"
+            className="flex flex-col justify-between border border-slate-300 rounded-lg p-8 gap-5"
           >
             <h2 className="text-2xl font-bold">
               Desk Number: {desk.deskNumber}
             </h2>
             <div className="grid grid-cols-5 gap-2">
               <div className="border border-slate-300 rounded-sm p-3 flex items-center">
-                <FaRegBuilding className="mr-1" />
-                Floor: {desk.floor}
+                <FaRegBuilding className="mr-1" /> Floor: {desk.floor}
               </div>
             </div>
             <span className="flex justify-end">
@@ -50,6 +64,11 @@ const MyDesks = () => {
           </div>
         ))}
       </div>
+      <Pagination
+        page={currentPage}
+        pages={data.pagination.pages}
+        onPageChange={setCurrentPage}
+      />
     </div>
   );
 };

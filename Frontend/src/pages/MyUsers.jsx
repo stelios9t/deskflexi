@@ -1,16 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
 import * as apiClient from "../api-client.js";
 import { MdEmail } from "react-icons/md";
 import { BsPersonVcardFill } from "react-icons/bs";
 import defaultImage from "../images/default-image.jpg";
-const MyUsers = () => {
-  const { data } = useQuery("fetchMyUsers", apiClient.fetchMyUsers, {
-    onError: () => {},
-  });
+import Pagination from "../components/Pagination";
 
-  if (!data) {
+const MyUsers = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const { data, error, isLoading, isError } = useQuery(
+    ["fetchMyUsers", currentPage],
+    () => apiClient.fetchMyUsers(currentPage),
+
+    {
+      keepPreviousData: true,
+    }
+  );
+
+  if (isLoading) {
+    return <span>Loading...</span>;
+  }
+
+  if (isError) {
+    return <span>Error: {error.message}</span>;
+  }
+
+  if (!data || !data.data || data.data.length === 0) {
     return <span>No users found</span>;
   }
 
@@ -26,7 +42,7 @@ const MyUsers = () => {
         </Link>
       </span>
       <div className="grid grid-cols-1 gap-8">
-        {data.map((user) => (
+        {data.data.map((user) => (
           <div
             key={user._id}
             className="flex flex-col border border-slate-300 rounded-lg p-8 gap-5"
@@ -47,7 +63,7 @@ const MyUsers = () => {
               )}
               <div>
                 <h2 className="text-2xl font-bold">
-                  Name: {user.firstName} {user.lastName}
+                  {user.firstName} {user.lastName}
                 </h2>
                 <div className="rounded-sm p-3 flex items-center">
                   <BsPersonVcardFill className="mr-1" />
@@ -70,6 +86,11 @@ const MyUsers = () => {
           </div>
         ))}
       </div>
+      <Pagination
+        page={currentPage}
+        pages={data.pagination.pages}
+        onPageChange={setCurrentPage}
+      />
     </div>
   );
 };
