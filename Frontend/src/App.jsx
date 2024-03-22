@@ -60,10 +60,11 @@ function App() {
         <Route
           path="/"
           element={
-            <Layout isLoggedIn={isLoggedIn}>
-              {/* Redirect from Home Page to Search Page */}
+            isLoggedIn ? (
               <Navigate to="/search" replace />
-            </Layout>
+            ) : (
+              <Navigate to="/sign-in" replace />
+            )
           }
         />
         /{/* routes for admin only */}
@@ -140,7 +141,7 @@ function App() {
             />
           </>
         )}
-        <Route path="*" element={<Navigate to="/search" replace />} />
+        <Route path="*" element={<Navigate to="/sign-in" replace />} />
       </Routes>
     </Router>
   );
