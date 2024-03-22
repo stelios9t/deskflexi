@@ -6,20 +6,30 @@ import { MdEmail } from "react-icons/md";
 import { BsPersonVcardFill } from "react-icons/bs";
 import defaultImage from "../images/default-image.jpg";
 import Pagination from "../components/Pagination";
-
+import LoadingSpinner from "../components/LoadingSpinner.jsx";
 const MyUsers = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [isPageLoading, setIsPageLoading] = useState(false); // Local loading state
+
   const { data, error, isLoading, isError } = useQuery(
     ["fetchMyUsers", currentPage],
     () => apiClient.fetchMyUsers(currentPage),
-
     {
       keepPreviousData: true,
+      onSuccess: () => setIsPageLoading(false),
+      onError: () => setIsPageLoading(false),
     }
   );
 
-  if (isLoading) {
-    return <span>Loading...</span>;
+  const loading = isLoading || isPageLoading;
+
+  const handlePageChange = (newPage) => {
+    setIsPageLoading(true);
+    setCurrentPage(newPage);
+  };
+
+  if (loading) {
+    return <LoadingSpinner />;
   }
 
   if (isError) {
@@ -89,7 +99,7 @@ const MyUsers = () => {
       <Pagination
         page={currentPage}
         pages={data.pagination.pages}
-        onPageChange={setCurrentPage}
+        onPageChange={handlePageChange}
       />
     </div>
   );

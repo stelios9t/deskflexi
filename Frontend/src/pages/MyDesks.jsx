@@ -4,20 +4,34 @@ import { useQuery } from "react-query";
 import * as apiClient from "../api-client";
 import { FaRegBuilding } from "react-icons/fa";
 import Pagination from "../components/Pagination";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const MyDesks = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [isPageLoading, setIsPageLoading] = useState(false);
 
   const { data, error, isLoading, isError } = useQuery(
     ["fetchMyDesks", currentPage],
     () => apiClient.fetchMyDesks(currentPage),
     {
       keepPreviousData: true,
+      onSuccess: () => setIsPageLoading(false),
+      onError: () => setIsPageLoading(false),
     }
   );
 
-  if (isLoading) {
-    return <span>Loading...</span>;
+  // Combine global and local loading states for smoother UX
+  const loading = isLoading || isPageLoading;
+
+  // Enhance page change handler
+  const handlePageChange = (newPage) => {
+    setIsPageLoading(true); // Set local loading state
+    setCurrentPage(newPage);
+  };
+
+  if (loading) {
+    // Check the combined loading state
+    return <LoadingSpinner />;
   }
 
   if (isError) {
@@ -27,7 +41,6 @@ const MyDesks = () => {
   if (!data || !data.data || data.data.length === 0) {
     return <span>No desks found</span>;
   }
-
   return (
     <div className="space-y-5">
       <span className="flex justify-between">
@@ -67,7 +80,7 @@ const MyDesks = () => {
       <Pagination
         page={currentPage}
         pages={data.pagination.pages}
-        onPageChange={setCurrentPage}
+        onPageChange={handlePageChange}
       />
     </div>
   );

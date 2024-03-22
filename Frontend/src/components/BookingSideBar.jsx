@@ -6,6 +6,7 @@ import { useMutation } from "react-query";
 import { useAppContext } from "../contexts/AppContext.jsx";
 import { useSearchContext } from "../contexts/SearchContext.jsx";
 import BookingModal from "./BookingModal.jsx";
+import deskIcon from "../images/desk-icon.avif";
 const BookingSideBar = ({ desk, closeModal }) => {
   const { deskId } = useParams();
   const [currentUser, setCurrentUser] = useState(null);
@@ -119,9 +120,16 @@ const BookingSideBar = ({ desk, closeModal }) => {
           <div>
             <div className="p-4 border-b">
               <div className="flex items-center justify-between">
-                <h3 className="text-xl font-semibold text-gray-900">
+                <h3 className="text-xl font-semibold text-gray-900 flex items-center">
+                  <img
+                    src={deskIcon}
+                    alt="Desk Icon"
+                    className="mr-2"
+                    style={{ width: "48px", height: "48px" }}
+                  />
                   D-{desk.deskNumber}
                 </h3>
+
                 <button
                   onClick={closeModal}
                   className="text-gray-500 hover:text-gray-700 focus:outline-none"
@@ -168,10 +176,16 @@ const BookingSideBar = ({ desk, closeModal }) => {
                 </p>
               </div>
               <div className="flex justify-between mb-4">
-                <p className="text-base text-gray-700">Amenities:</p>
-                <p className="text-base text-gray-700">
-                  {filteredAmenities.join(", ") || "None"}
-                </p>
+                <p className="text-base text-gray-700 mr-4">Amenities:</p>
+                <div className="flex justify-end flex-1">
+                  <ul className="list-disc space-y-1 text-right">
+                    {filteredAmenities.map((amenity, index) => (
+                      <li key={index} className="text-base text-gray-700">
+                        {amenity}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
