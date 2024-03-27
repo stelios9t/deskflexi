@@ -2,10 +2,12 @@ import React, { useEffect } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import DetailsSection from "./DetailsSection";
 import AmenitiesSection from "./AmenitiesSection";
+import { useNavigate } from "react-router-dom";
 
 const ManageDeskForm = ({ onSave, isLoading, desk }) => {
   const formMethods = useForm();
   const { handleSubmit, reset, setValue } = formMethods;
+  const navigate = useNavigate();
 
   useEffect(() => {
     reset(desk);
@@ -48,13 +50,21 @@ const ManageDeskForm = ({ onSave, isLoading, desk }) => {
       <form onSubmit={onSubmit} className="flex flex-col gap-10">
         <DetailsSection />
         <AmenitiesSection />
-        <span className="flex justify-end">
+        <span className="flex justify-end gap-4">
+          <button
+            type="button"
+            className="bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 rounded"
+            onClick={() => navigate("/my-desks")}
+          >
+            Back
+          </button>
+
           <button
             disabled={isLoading}
             type="submit"
-            className="bg-black text-white p-2 font-bold  text-xl disabled:bg-gray-500"
+            className="bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 rounded"
           >
-            {isLoading ? "Saving..." : "Save"}
+            {isLoading ? "Updating..." : "Update Desk"}
           </button>
         </span>
       </form>

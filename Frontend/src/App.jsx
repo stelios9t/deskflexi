@@ -16,7 +16,7 @@ import Search from "./pages/Search.jsx";
 import * as apiClient from "./api-client";
 import MyUsers from "./pages/MyUsers.jsx";
 import EditUser from "./pages/EditUser.jsx";
-
+import MyBookings from "./pages/MyBookings.jsx";
 function App() {
   const { isLoggedIn } = useAppContext();
   const [userRole, setUserRole] = useState(null);
@@ -136,6 +136,14 @@ function App() {
               element={
                 <Layout isLoggedIn={isLoggedIn}>
                   <Search />
+                </Layout>
+              }
+            />
+            <Route
+              path="/my-bookings"
+              element={
+                <Layout>
+                  <MyBookings />
                 </Layout>
               }
             />

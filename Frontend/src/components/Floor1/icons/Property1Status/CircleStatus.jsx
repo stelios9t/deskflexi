@@ -1,13 +1,18 @@
-import React from "react";
-
 export const CircleStatus = ({
   className,
   onClick,
   isHighlighted = false,
   booked = false,
+  bookedByCurrentUser = false, // New prop
 }) => {
-  // Determine the fill color based on the `booked` and `isHighlighted` props
-  const fillColor = booked ? "#FF0000" : isHighlighted ? "#237025" : "#00D509";
+  const fillColor = bookedByCurrentUser
+    ? "#0000FF" // Blue for desks booked by the current user
+    : booked
+    ? "#FF0000" // Red for desks booked by others
+    : isHighlighted
+    ? "#237025" // Green for available desks
+    : "#00D509"; // Default color
+
   const classes = `${className} property1status ${
     isHighlighted ? "highlighted" : ""
   }`;

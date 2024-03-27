@@ -11,6 +11,7 @@ import myDeskRoutes from "./routes/my-desks.js";
 import deskRoutes from "./routes/desks.js";
 import path from "path";
 import myUserRoutes from "./routes/my-users.js";
+import bookingRoutes from "./routes/my-bookings.js";
 import { v2 as cloudinary } from "cloudinary";
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -43,6 +44,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/my-desks", myDeskRoutes);
 app.use("/api/desks", deskRoutes);
 app.use("/api/my-users", myUserRoutes);
+app.use("/api/my-bookings", bookingRoutes);
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../../Frontend/dist/index.html"));
 });

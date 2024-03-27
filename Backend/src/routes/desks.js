@@ -35,7 +35,7 @@ router.get(
 );
 router.post("/:deskId/bookings", verifyToken, async (req, res) => {
   try {
-    const { checkIn, checkOut, firstName, lastName, email } = req.body;
+    const { checkIn } = req.body;
     const deskId = req.params.deskId;
     const userId = req.userId;
 
@@ -46,38 +46,29 @@ router.post("/:deskId/bookings", verifyToken, async (req, res) => {
     };
 
     const requestedCheckIn = toMidnight(checkIn);
-    const requestedCheckOut = toMidnight(checkOut);
-
-    // Since we only care about dates (not times), ensure checkOut is at least the day after checkIn
-    requestedCheckOut.setDate(requestedCheckOut.getDate() + 1);
 
     // Check for any existing booking by this user on the specified date across all desks
     const existingBooking = await Desk.findOne({
-      bookings: {
-        $elemMatch: {
-          userId: userId,
-          $or: [
-            { checkIn: { $lte: requestedCheckOut, $gte: requestedCheckIn } },
-            { checkOut: { $gte: requestedCheckIn, $lte: requestedCheckOut } },
-          ],
-        },
-      },
+      "bookings.userId": userId,
+      "bookings.checkIn": requestedCheckIn,
     });
 
     if (existingBooking) {
-      return res
-        .status(400)
-        .json({ message: "You have already booked a desk for this date." });
+      return res.status(400).json({
+        message: "You have already booked a desk for this date.",
+      });
     }
 
     const newBooking = {
       userId,
-      firstName,
-      lastName,
-      email,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
       checkIn: requestedCheckIn,
-      checkOut: requestedCheckOut,
+      // Assuming checkOut is not used as per your new system's logic
+      checkOut: requestedCheckIn,
     };
+
     const desk = await Desk.findByIdAndUpdate(
       deskId,
       { $push: { bookings: newBooking } },

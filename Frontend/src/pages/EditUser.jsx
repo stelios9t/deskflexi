@@ -122,7 +122,15 @@ const EditUser = () => {
             <span className="text-red-500">{errors.role.message}</span>
           )}
         </div>
-        <div className="flex justify-end">
+        <div className="flex justify-end gap-4">
+          <button
+            type="button"
+            className="bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 rounded"
+            onClick={() => navigate("/my-users")}
+          >
+            Back
+          </button>
+
           <button
             type="submit"
             disabled={isLoading}

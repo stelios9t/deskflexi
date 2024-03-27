@@ -253,3 +253,13 @@ export const createDeskBooking = async (formData) => {
     throw new Error(errorBody.message || "Error booking desk");
   }
 };
+
+export const fetchMyBookings = async () => {
+  const response = await fetch(`${API_BASE_URL}/api/my-bookings`, {
+    credentials: "include",
+  });
+  if (!response.ok) {
+    throw new Error("Unable to fetch bookings");
+  }
+  return response.json();
+};
