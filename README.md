@@ -1,6 +1,6 @@
 ## DeskFlexi - Hot Desking System 
 **This project is still under development**
-## Tech Stack: MongoDB, ExpressJS, ReactJS, NodeJS, TailwindCSS, React Router, JWT Authorization, e2e testing
+## Tech Stack: MongoDB, ExpressJS, ReactJS, NodeJS, TailwindCSS, React Router, JWT Authorization, e2e testing, Figma
 ### Final year project for BsC Computer Science
 ### A hot desking system developed using MERN stack
 
