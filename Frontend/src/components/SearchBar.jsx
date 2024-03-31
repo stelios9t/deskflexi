@@ -19,6 +19,12 @@ const SearchBar = () => {
     search.saveSearchValues(deskNumber, checkIn, checkOut, floor);
     navigate("/search");
   };
+  useEffect(() => {
+    setDeskNumber(search.deskNumber);
+    setCheckIn(search.checkIn);
+    setCheckOut(search.checkOut);
+    setFloor(search.floor);
+  }, [search.deskNumber, search.checkIn, search.checkOut, search.floor]);
 
   const minDate = new Date();
   const maxDate = new Date();
@@ -26,6 +32,14 @@ const SearchBar = () => {
   useEffect(() => {
     setDeskNumber(search.deskNumber);
   }, [search.deskNumber]);
+  const handleClear = (event) => {
+    event.preventDefault();
+
+    setDeskNumber("");
+    setCheckIn(new Date());
+    setCheckOut(new Date());
+    setFloor(1);
+  };
   return (
     <form
       onSubmit={handleSubmit}
@@ -88,10 +102,13 @@ const SearchBar = () => {
         />
       </div>
       <div className="flex gap-1">
-        <button className="w-2/3 bg-black text-white h-full p-2 font-bold text-xl hover:bg-gray-800">
+        <button className="w-2/3 bg-black text-white h-full p-2 font-bold text-xl hover:bg-gray-800 rounded">
           Search
         </button>
-        <button className="w-1/3 bg-red-600 text-white h-full p-2 font-bold text-xl hover:bg-red-500">
+        <button
+          onClick={handleClear}
+          className="w-1/3 bg-red-600 text-white h-full p-2 font-bold text-xl hover:bg-red-500 rounded"
+        >
           Clear
         </button>
       </div>

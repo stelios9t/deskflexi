@@ -87,6 +87,49 @@ router.post("/:deskId/bookings", verifyToken, async (req, res) => {
       .json({ message: "Something went wrong during the booking process." });
   }
 });
+router.delete(
+  "/:deskId/bookings",
+  verifyToken,
+  [param("deskId").notEmpty().withMessage("Desk ID is required")],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { userId, checkIn } = req.body; // Assuming you pass userId and checkIn to identify the booking
+    const deskId = req.params.deskId;
+    const toMidnight = (date) => {
+      const newDate = new Date(date);
+      newDate.setHours(0, 0, 0, 0);
+      return newDate;
+    };
+    const requestedCheckIn = toMidnight(checkIn);
+
+    try {
+      const updatedDesk = await Desk.findOneAndUpdate(
+        {
+          _id: deskId,
+          "bookings.userId": userId,
+          "bookings.checkIn": requestedCheckIn,
+        },
+        { $pull: { bookings: { userId: userId, checkIn: requestedCheckIn } } },
+        { new: true }
+      );
+
+      if (!updatedDesk) {
+        return res.status(404).json({ message: "Booking not found" });
+      }
+
+      res
+        .status(200)
+        .json({ message: "Booking cancelled successfully", data: updatedDesk });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Error cancelling booking" });
+    }
+  }
+);
 
 const constructSearchQuery = (queryParams) => {
   let constructedQuery = {};

@@ -3,7 +3,7 @@ import { useSearchContext } from "../contexts/SearchContext";
 import { useQuery } from "react-query";
 import * as apiClient from "../api-client";
 import AmenitiesFilter from "../components/AmenitiesFilter";
-
+import LoadingSpinner from "../components/LoadingSpinner.jsx";
 import Floor1 from "../components/Floor1/screens/Floor1/Floor1.jsx";
 const Search = () => {
   const search = useSearchContext();
@@ -17,8 +17,11 @@ const Search = () => {
     floor: search.floor.toString(),
     amenities: selectedAmenities,
   };
-
-  const { data: deskData, refetch } = useQuery(
+  const {
+    data: deskData,
+    isLoading,
+    refetch,
+  } = useQuery(
     ["searchDesks", searchParams],
     () => apiClient.searchDesks(searchParams),
     {
@@ -52,9 +55,14 @@ const Search = () => {
           onChange={handleAmenityChange}
         />
       </div> */}
-      <div className="flex flex-col gap-5">
-        <Floor1 />
-      </div>
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <div className="flex flex-col gap-5">
+          {/* Render your search results or any other content here */}
+          <Floor1 />
+        </div>
+      )}
     </div>
   );
 };

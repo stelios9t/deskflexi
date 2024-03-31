@@ -10,9 +10,12 @@ router.get("/", verifyToken, async (req, res) => {
       req.query.page ? req.query.page.toString() : "1"
     ); // Get the page number from query parameters or default to 1
     const skip = (pageNumber - 1) * pageSize; // Calculate the number of documents to skip
-
-    const users = await User.find().skip(skip).limit(pageSize);
-    const total = await User.countDocuments();
+    let query = {};
+    if (req.query.firstName) {
+      query.firstName = { $regex: req.query.firstName, $options: "i" };
+    }
+    const users = await User.find(query).skip(skip).limit(pageSize);
+    const total = await User.countDocuments(query);
     res.json({
       data: users,
       pagination: {

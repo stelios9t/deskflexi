@@ -34,7 +34,6 @@ export default function Header() {
 
   const adminLinks = [
     { to: "/my-users", label: "Users" },
-    { to: "/admin/buildings", label: "Buildings" },
     { to: "/my-desks", label: "Desks" },
     { to: "/admin/conference-rooms", label: "Conference Rooms" },
   ];

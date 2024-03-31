@@ -150,7 +150,7 @@ const Register = () => {
       <div className="flex justify-end">
         <button
           type="submit"
-          className="bg-black text-white p-2 font-bold hover:bg-blue-500 text-xl"
+          className="bg-black text-white p-2 font-bold hover:bg-blue-500 text-xl rounded"
         >
           Create Account
         </button>

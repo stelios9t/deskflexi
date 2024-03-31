@@ -55,7 +55,7 @@ const BookingSideBar = ({ desk, closeModal }) => {
     {
       onSuccess: () => {
         showToast({ message: "Booking Saved!", type: "SUCCESS" });
-        closeModal();
+        closeModal("booking");
       },
       onError: (error) => {
         console.error("Booking error:", error); // It's helpful to log the entire error for debugging.
@@ -131,7 +131,7 @@ const BookingSideBar = ({ desk, closeModal }) => {
                 </h3>
 
                 <button
-                  onClick={closeModal}
+                  onClick={() => closeModal("closeIcon")}
                   className="text-gray-500 hover:text-gray-700 focus:outline-none"
                 >
                   <svg

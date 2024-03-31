@@ -38,16 +38,20 @@ router.post(
 );
 router.get("/", verifyToken, async (req, res) => {
   try {
-    const pageSize = 10; // Define how many items you want per page
+    const pageSize = 10;
     const pageNumber = parseInt(
       req.query.page ? req.query.page.toString() : "1"
-    ); // Get the page number from query parameters or default to 1
-    const skip = (pageNumber - 1) * pageSize; // Calculate the number of documents to skip
+    );
+    const skip = (pageNumber - 1) * pageSize;
 
-    const desks = await Desk.find().skip(skip).limit(pageSize); // Apply pagination
-    const total = await Desk.countDocuments(); // Count the total documents
+    let query = {};
+    if (req.query.deskNumber) {
+      query.deskNumber = req.query.deskNumber;
+    }
 
-    // Return desks along with pagination details
+    const desks = await Desk.find(query).skip(skip).limit(pageSize);
+    const total = await Desk.countDocuments(query);
+
     res.json({
       data: desks,
       pagination: {

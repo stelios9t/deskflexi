@@ -96,10 +96,16 @@ export const addMyDesk = async (deskFormData) => {
   }
 };
 
-export const fetchMyDesks = async (page = 1) => {
-  const response = await fetch(`${API_BASE_URL}/api/my-desks?page=${page}`, {
+export const fetchMyDesks = async (page = 1, searchTerm = "") => {
+  let url = `${API_BASE_URL}/api/my-desks?page=${page}`;
+  if (searchTerm) {
+    url += `&deskNumber=${searchTerm}`;
+  }
+
+  const response = await fetch(url, {
     credentials: "include",
   });
+
   if (!response.ok) {
     throw new Error("Error fetching desks");
   }
@@ -163,8 +169,13 @@ export const searchDesks = async (searchParams) => {
   return response.json();
 };
 
-export const fetchMyUsers = async (page = 1) => {
-  const response = await fetch(`${API_BASE_URL}/api/my-users?page=${page}`, {
+export const fetchMyUsers = async (page = 1, searchTerm = "") => {
+  let url = `${API_BASE_URL}/api/my-users?page=${page}`;
+  if (searchTerm) {
+    url += `&firstName=${searchTerm}`;
+  }
+
+  const response = await fetch(url, {
     credentials: "include",
   });
   if (!response.ok) {
@@ -260,6 +271,21 @@ export const fetchMyBookings = async () => {
   });
   if (!response.ok) {
     throw new Error("Unable to fetch bookings");
+  }
+  return response.json();
+};
+export const cancelBooking = async (deskId, userId, checkIn) => {
+  const response = await fetch(`${API_BASE_URL}/api/desks/${deskId}/bookings`, {
+    method: "DELETE",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ userId, checkIn }),
+  });
+  if (!response.ok) {
+    const errorBody = await response.json();
+    throw new Error(errorBody.message || "Error cancelling booking");
   }
   return response.json();
 };
