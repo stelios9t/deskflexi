@@ -30,7 +30,18 @@ const EditUser = () => {
       },
     }
   );
-
+  const deleteMutation = useMutation(() => apiClient.deleteUserById(userId), {
+    onSuccess: () => {
+      showToast({ message: "User successfully deleted!", type: "SUCCESS" });
+      navigate("/my-users");
+    },
+    onError: (error) => {
+      showToast({
+        message: "Error deleting user",
+        type: "ERROR",
+      });
+    },
+  });
   const onSubmit = async (data) => {
     try {
       await updateUser({ userId, ...data });
@@ -56,10 +67,21 @@ const EditUser = () => {
 
     fetchUser();
   }, [userId, setValue, showToast]);
-
+  const handleDelete = () => {
+    deleteMutation.mutate();
+  };
   return (
     <div className="flex flex-col gap-5">
-      <h2 className="text-3xl font-bold">Edit User</h2>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-3xl font-bold">Edit User</h2>
+        <button
+          type="button"
+          onClick={handleDelete}
+          className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded self-start"
+        >
+          Delete
+        </button>
+      </div>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 ">
         <div className="flex flex-col gap-1">
           <label

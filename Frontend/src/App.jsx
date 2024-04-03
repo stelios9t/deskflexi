@@ -17,6 +17,10 @@ import * as apiClient from "./api-client";
 import MyUsers from "./pages/MyUsers.jsx";
 import EditUser from "./pages/EditUser.jsx";
 import MyBookings from "./pages/MyBookings.jsx";
+import MyCrooms from "./pages/MyCrooms.jsx";
+import AddCroom from "./pages/AddCroom.jsx";
+import EditCroom from "./pages/EditCroom.jsx";
+import BookingSideBarCroom from "./components/BookingSideBarCroom.jsx";
 function App() {
   const { isLoggedIn } = useAppContext();
   const [userRole, setUserRole] = useState(null);
@@ -103,6 +107,22 @@ function App() {
               }
             />
             <Route
+              path="/my-crooms"
+              element={
+                <Layout>
+                  <MyCrooms />
+                </Layout>
+              }
+            />
+            <Route
+              path="/add-croom"
+              element={
+                <Layout>
+                  <AddCroom />
+                </Layout>
+              }
+            />
+            <Route
               path="/my-users"
               element={
                 <Layout>
@@ -115,6 +135,14 @@ function App() {
               element={
                 <Layout>
                   <EditUser />
+                </Layout>
+              }
+            />
+            <Route
+              path="/edit-croom/:croomId"
+              element={
+                <Layout>
+                  <EditCroom />
                 </Layout>
               }
             />
@@ -132,7 +160,15 @@ function App() {
               }
             />
             <Route
-              path="/detail/:deskId"
+              path="/detail/desk/:deskId"
+              element={
+                <Layout isLoggedIn={isLoggedIn}>
+                  <Search />
+                </Layout>
+              }
+            />
+            <Route
+              path="/detail/croom/:croomId"
               element={
                 <Layout isLoggedIn={isLoggedIn}>
                   <Search />

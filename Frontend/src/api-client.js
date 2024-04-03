@@ -95,6 +95,36 @@ export const addMyDesk = async (deskFormData) => {
     throw new Error("An unexpected error occurred.");
   }
 };
+export const addMyCroom = async (croomFormData) => {
+  try {
+    // Log the form data for debugging
+    console.log("croomFormData:", croomFormData);
+
+    const response = await fetch(`${API_BASE_URL}/api/my-crooms`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        croomNumber: croomFormData.croomNumber,
+        floor: croomFormData.floor,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Failed to add conference room: ${errorData.message}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error adding conference room:", error);
+    throw new Error(
+      "An unexpected error occurred while adding a conference room."
+    );
+  }
+};
 
 export const fetchMyDesks = async (page = 1, searchTerm = "") => {
   let url = `${API_BASE_URL}/api/my-desks?page=${page}`;
@@ -108,6 +138,21 @@ export const fetchMyDesks = async (page = 1, searchTerm = "") => {
 
   if (!response.ok) {
     throw new Error("Error fetching desks");
+  }
+  return response.json();
+};
+export const fetchMyCrooms = async (page = 1, searchTerm = "") => {
+  let url = `${API_BASE_URL}/api/my-crooms?page=${page}`;
+  if (searchTerm) {
+    url += `&croomNumber=${searchTerm}`;
+  }
+
+  const response = await fetch(url, {
+    credentials: "include",
+  });
+
+  if (!response.ok) {
+    throw new Error("Error fetching conference rooms");
   }
   return response.json();
 };
@@ -143,6 +188,32 @@ export const updateDeskById = async (deskFormData) => {
   } catch (error) {
     console.error("Error updating desk:", error);
     throw new Error("An unexpected error occurred while updating desk.");
+  }
+};
+export const updateCroomById = async (croomFormData) => {
+  try {
+    const response = await fetch(
+      `${API_BASE_URL}/api/my-crooms/${croomFormData.croomId}`,
+      {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json", // Change content type to JSON
+        },
+        body: JSON.stringify({
+          croomNumber: croomFormData.croomNumber,
+          floor: croomFormData.floor,
+        }),
+      }
+    );
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Failed to update room: ${errorData.message}`);
+    }
+    return response.json();
+  } catch (error) {
+    console.error("Error updating room:", error);
+    throw new Error("An unexpected error occurred while updating room.");
   }
 };
 
@@ -231,6 +302,13 @@ export const fetchDeskById = async (deskId) => {
   }
   return response.json();
 };
+export const fetchCroomById = async (croomId) => {
+  const response = await fetch(`${API_BASE_URL}/api/crooms/${croomId}`);
+  if (!response.ok) {
+    throw new Error("Error fetching desks");
+  }
+  return response.json();
+};
 export const fetchLoggedInUser = async () => {
   try {
     const response = await fetch(`${API_BASE_URL}/api/auth/validate-token`, {
@@ -288,4 +366,60 @@ export const cancelBooking = async (deskId, userId, checkIn) => {
     throw new Error(errorBody.message || "Error cancelling booking");
   }
   return response.json();
+};
+export const deleteDeskById = async (deskId) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/my-desks/${deskId}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Failed to delete desk: ${errorData.message}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error deleting desk:", error);
+    throw new Error("An unexpected error occurred while deleting desk.");
+  }
+};
+export const deleteCroomById = async (croomId) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/my-crooms/${croomId}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Failed to delete conference rom: ${errorData.message}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error deleting conference room:", error);
+    throw new Error(
+      "An unexpected error occurred while deleting conference room."
+    );
+  }
+};
+export const deleteUserById = async (userId) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/my-users/${userId}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Failed to delete user: ${errorData.message}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    throw new Error("An unexpected error occurred while deleting user.");
+  }
 };

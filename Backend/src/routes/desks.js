@@ -8,8 +8,8 @@ const router = express.Router();
 router.get("/search", async (req, res) => {
   try {
     const query = constructSearchQuery(req.query);
-    const desks = await Desk.find(query); // Removed skip and limit for pagination
-    res.json({ data: desks }); // Simplified response, no pagination info
+    const desks = await Desk.find(query);
+    res.json({ data: desks });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
   }

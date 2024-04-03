@@ -35,7 +35,7 @@ export default function Header() {
   const adminLinks = [
     { to: "/my-users", label: "Users" },
     { to: "/my-desks", label: "Desks" },
-    { to: "/admin/conference-rooms", label: "Conference Rooms" },
+    { to: "/my-crooms", label: "Conference Rooms" },
   ];
 
   const handleDropdownToggle = () => {

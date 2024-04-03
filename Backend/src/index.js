@@ -13,6 +13,8 @@ import path from "path";
 import myUserRoutes from "./routes/my-users.js";
 import bookingRoutes from "./routes/my-bookings.js";
 import { v2 as cloudinary } from "cloudinary";
+import croomsRoutes from "./routes/crooms.js";
+import myCroomRoutes from "./routes/my-crooms.js";
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -45,6 +47,8 @@ app.use("/api/my-desks", myDeskRoutes);
 app.use("/api/desks", deskRoutes);
 app.use("/api/my-users", myUserRoutes);
 app.use("/api/my-bookings", bookingRoutes);
+app.use("/api/crooms", croomsRoutes);
+app.use("/api/my-crooms", myCroomRoutes);
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../../Frontend/dist/index.html"));
 });

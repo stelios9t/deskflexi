@@ -40,7 +40,7 @@ const MyDesks = () => {
             value={searchTerm}
             onChange={handleSearchChange}
             placeholder="Search by desk number"
-            className="input bg-white border border-slate-300 p-2"
+            className="input bg-white border border-slate-300 p-2 rounded"
           />
         </div>
         <Link

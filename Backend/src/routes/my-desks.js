@@ -2,7 +2,6 @@ import express from "express";
 import Desk from "../model/desk.js";
 import { body } from "express-validator";
 import verifyToken from "../middleware/auth.js";
-import { checkRole } from "../middleware/checkRole.js";
 const router = express.Router();
 
 router.post(
@@ -97,4 +96,20 @@ router.put("/:deskId", verifyToken, async (req, res) => {
     res.status(500).json({ message: "Something went wrong" });
   }
 });
+router.delete("/:deskId", verifyToken, async (req, res) => {
+  try {
+    const { deskId } = req.params;
+    const desk = await Desk.findByIdAndDelete(deskId);
+
+    if (!desk) {
+      return res.status(404).json({ message: "Desk not found" });
+    }
+
+    res.status(200).json({ message: "Desk deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting desk:", error);
+    res.status(500).json({ message: "Error deleting desk" });
+  }
+});
+
 export default router;

@@ -55,14 +55,15 @@ const Search = () => {
           onChange={handleAmenityChange}
         />
       </div> */}
-      {isLoading ? (
-        <LoadingSpinner />
-      ) : (
-        <div className="flex flex-col gap-5">
-          {/* Render your search results or any other content here */}
-          <Floor1 />
+      {isLoading && (
+        <div className="absolute z-10 inset-0 bg-black bg-opacity-25 flex justify-center items-center">
+          <LoadingSpinner />
         </div>
       )}
+      {/* This container ensures the Floor1 component is always rendered, allowing the spinner to overlay */}
+      <div className="flex flex-col gap-5">
+        <Floor1 />
+      </div>
     </div>
   );
 };

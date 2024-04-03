@@ -4,7 +4,7 @@ import DetailsSection from "./DetailsSection";
 import AmenitiesSection from "./AmenitiesSection";
 import { useNavigate } from "react-router-dom";
 
-const ManageDeskForm = ({ onSave, isLoading, desk }) => {
+const ManageDeskForm = ({ onSave, isLoading, desk, mode }) => {
   const formMethods = useForm();
   const { handleSubmit, reset, setValue } = formMethods;
   const navigate = useNavigate();
@@ -44,31 +44,49 @@ const ManageDeskForm = ({ onSave, isLoading, desk }) => {
 
     reset();
   });
-
   return (
-    <FormProvider {...formMethods}>
-      <form onSubmit={onSubmit} className="flex flex-col gap-10">
-        <DetailsSection />
-        <AmenitiesSection />
-        <span className="flex justify-end gap-4">
+    <div>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">
+          {mode === "edit" ? "Edit Desk" : "Add Desk"}
+        </h1>
+        {mode === "edit" && (
           <button
             type="button"
-            className="bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 rounded"
-            onClick={() => navigate("/my-desks")}
+            onClick={onDelete}
+            className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
           >
-            Back
+            Delete
           </button>
-
-          <button
-            disabled={isLoading}
-            type="submit"
-            className="bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 rounded"
-          >
-            {isLoading ? "Updating..." : "Update Desk"}
-          </button>
-        </span>
-      </form>
-    </FormProvider>
+        )}
+      </div>
+      <FormProvider {...formMethods}>
+        <form onSubmit={onSubmit} className="flex flex-col gap-10">
+          <DetailsSection />
+          <AmenitiesSection />
+          <div className="flex justify-end gap-4">
+            <button
+              type="button"
+              onClick={() => navigate("/my-desks")}
+              className="bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 rounded"
+            >
+              Back
+            </button>
+            <button
+              disabled={isLoading}
+              type="submit"
+              className="bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 rounded"
+            >
+              {isLoading
+                ? "Loading..."
+                : mode === "edit"
+                ? "Update Desk"
+                : "Save Desk"}
+            </button>
+          </div>
+        </form>
+      </FormProvider>
+    </div>
   );
 };
 

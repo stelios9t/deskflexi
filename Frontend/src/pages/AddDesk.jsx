@@ -18,9 +18,7 @@ const AddDesk = () => {
     mutate(deskFormData);
   };
   return (
-    <ManageDeskForm onSave={handleSave} isLoading={isLoading}>
-      AddDesk
-    </ManageDeskForm>
+    <ManageDeskForm onSave={handleSave} isLoading={isLoading}></ManageDeskForm>
   );
 };
 

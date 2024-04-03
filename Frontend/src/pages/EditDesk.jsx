@@ -46,13 +46,32 @@ const EditDesk = () => {
     deskFormData.deskId = deskId;
     mutate(deskFormData);
   };
-
+  const deleteMutation = useMutation(() => apiClient.deleteDeskById(deskId), {
+    onSuccess: () => {
+      showToast({ message: "Desk successfully deleted!", type: "SUCCESS" });
+      navigate("/my-desks");
+    },
+    onError: (error) => {
+      showToast({
+        message: "Error deleting desk",
+        type: "ERROR",
+      });
+    },
+  });
   if (isError) {
     return <span>Error: {error.message}</span>;
   }
-
+  const handleDelete = () => {
+    deleteMutation.mutate();
+  };
   return (
-    <ManageDeskForm desk={desk} onSave={handleSave} isLoading={isLoading} />
+    <ManageDeskForm
+      desk={desk}
+      onSave={handleSave}
+      isLoading={isLoading}
+      mode="edit"
+      onDelete={handleDelete}
+    />
   );
 };
 

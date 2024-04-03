@@ -37,7 +37,7 @@ const MyUsers = () => {
           value={searchInput}
           onChange={handleSearchChange}
           placeholder="Search by first name"
-          className="input bg-white border border-slate-300 p-2 mr-2"
+          className="input bg-white border border-slate-300 p-2 mr-2 rounded"
         />
         <button
           onClick={handleSearchClick}
