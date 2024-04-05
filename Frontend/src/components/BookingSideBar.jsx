@@ -14,6 +14,7 @@ const BookingSideBar = ({ desk, closeModal }) => {
   const { showToast } = useAppContext();
   const [isBooked, setIsBooked] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [bookingUser, setBookingUser] = useState(null);
 
   const search = useSearchContext();
 
@@ -33,12 +34,23 @@ const BookingSideBar = ({ desk, closeModal }) => {
           0
         );
 
-        const alreadyBooked = deskDetails.bookings.some((booking) => {
+        let alreadyBooked = false;
+        deskDetails.bookings.forEach((booking) => {
           const bookingStart = new Date(booking.checkIn).setHours(0, 0, 0, 0);
           const bookingEnd = new Date(booking.checkOut).setHours(0, 0, 0, 0);
-          return (
-            requestedCheckIn <= bookingEnd && requestedCheckOut >= bookingStart
-          );
+          if (
+            requestedCheckIn <= bookingEnd &&
+            requestedCheckOut >= bookingStart
+          ) {
+            alreadyBooked = true;
+            const bookingName = `${booking.firstName} ${booking.lastName}`;
+            // Check if the current user is the one who made the booking
+            if (booking.userId === userData._id) {
+              setBookingUser(`${bookingName} (you)`);
+            } else {
+              setBookingUser(bookingName);
+            }
+          }
         });
 
         setIsBooked(alreadyBooked);
@@ -50,6 +62,7 @@ const BookingSideBar = ({ desk, closeModal }) => {
 
     fetchCurrentUserAndDeskDetails();
   }, [deskId, search.checkIn, search.checkOut]);
+
   const { mutate: bookDesk, isLoading } = useMutation(
     apiClient.createDeskBooking,
     {
@@ -152,13 +165,18 @@ const BookingSideBar = ({ desk, closeModal }) => {
             </div>
             <div className="p-4">
               <div className="flex justify-between mb-4">
-                <p className="text-base text-gray-700">Book for:</p>
+                <p className="text-base text-gray-700">
+                  {isBooked ? "Booked by:" : "Book for:"}
+                </p>
                 <p className="text-base text-gray-700">
                   {loadingUser
                     ? "Loading..."
+                    : isBooked
+                    ? bookingUser
                     : `${currentUser?.firstName} ${currentUser?.lastName}`}
                 </p>
               </div>
+
               <div className="flex justify-between mb-4">
                 <p className="text-base text-gray-700">Status:</p>
                 <p

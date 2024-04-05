@@ -11,39 +11,42 @@ const SearchBar = () => {
   const search = useSearchContext();
   const [deskNumber, setDeskNumber] = useState(search.deskNumber);
   const [checkIn, setCheckIn] = useState(search.checkIn);
-  const [checkOut, setCheckOut] = useState(search.checkOut);
+  // Removed the useState for checkout and instead use the checkIn date for both
   const [floor, setFloor] = useState(search.floor);
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    search.saveSearchValues(deskNumber, checkIn, checkOut, floor);
+    // Use checkIn date for both checkIn and checkOut
+    search.saveSearchValues(deskNumber, checkIn, checkIn, floor);
     navigate("/search");
   };
+
   useEffect(() => {
     setDeskNumber(search.deskNumber);
     setCheckIn(search.checkIn);
-    setCheckOut(search.checkOut);
+    // No need to set checkOut here since it follows checkIn
     setFloor(search.floor);
-  }, [search.deskNumber, search.checkIn, search.checkOut, search.floor]);
+  }, [search.deskNumber, search.checkIn, search.floor]);
 
   const minDate = new Date();
   const maxDate = new Date();
   maxDate.setDate(maxDate.getDate() + 9);
-  useEffect(() => {
-    setDeskNumber(search.deskNumber);
-  }, [search.deskNumber]);
+
   const handleClear = (event) => {
     event.preventDefault();
+    const today = new Date();
 
     setDeskNumber("");
-    setCheckIn(new Date());
-    setCheckOut(new Date());
+    setCheckIn(today);
+    // No separate checkOut state to update
     setFloor(1);
   };
+
   return (
     <form
       onSubmit={handleSubmit}
-      className="-mt-8 p-3 bg-orange-400 rounded shadow-md grid grid-cols-2 lg: grid-cols-3 2xl:grid-cols-5 items-center gap-4"
+      className="-mt-8 p-3 bg-orange-400 rounded shadow-md grid grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 items-center gap-4"
     >
       <div className="flex flex-row items-center flex-1 bg-white p-2">
         <CiDesktop size={25} className="mr-2" />
@@ -76,10 +79,9 @@ const SearchBar = () => {
       <div>
         <DatePicker
           selected={checkIn}
-          onChange={(date) => setCheckIn(date)}
-          selectStart
-          startDate={checkIn}
-          endDate={checkOut}
+          onChange={(date) => {
+            setCheckIn(date);
+          }}
           minDate={minDate}
           maxDate={maxDate}
           placeholder="Check-in Date"
@@ -87,27 +89,13 @@ const SearchBar = () => {
           wrapperClassName="min-w-full"
         />
       </div>
-      <div>
-        <DatePicker
-          selected={checkOut}
-          onChange={(date) => setCheckOut(date)}
-          selectStart
-          startDate={checkIn}
-          endDate={checkOut}
-          minDate={minDate}
-          maxDate={maxDate}
-          placeholder="Check-in Date"
-          className="min-w-full bg-white p-2 focus:outline-none"
-          wrapperClassName="min-w-full"
-        />
-      </div>
-      <div className="flex gap-1">
-        <button className="w-2/3 bg-black text-white h-full p-2 font-bold text-xl hover:bg-gray-800 rounded">
+      <div className="flex gap-2">
+        <button className="bg-black text-white h-full p-2 font-bold text-xl hover:bg-gray-800 rounded flex-grow">
           Search
         </button>
         <button
           onClick={handleClear}
-          className="w-1/3 bg-red-600 text-white h-full p-2 font-bold text-xl hover:bg-red-500 rounded"
+          className="bg-red-600 text-white h-full p-2 font-bold text-xl hover:bg-red-500 rounded w-36" // Adjust the width as needed
         >
           Clear
         </button>

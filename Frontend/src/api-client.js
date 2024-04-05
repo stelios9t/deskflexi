@@ -1,4 +1,5 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
+import moment from "moment-timezone";
 
 export const fetchCurrentUser = async () => {
   const response = await fetch(`${API_BASE_URL}/api/users/me`, {
@@ -352,6 +353,7 @@ export const fetchMyBookings = async () => {
   }
   return response.json();
 };
+
 export const cancelBooking = async (deskId, userId, checkIn) => {
   const response = await fetch(`${API_BASE_URL}/api/desks/${deskId}/bookings`, {
     method: "DELETE",

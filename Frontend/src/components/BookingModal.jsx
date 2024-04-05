@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const BookingModal = ({ isOpen, onClose }) => {
   return (
     <>
@@ -39,17 +41,23 @@ const BookingModal = ({ isOpen, onClose }) => {
               </div>
               <div className="p-4 md:p-5 space-y-4">
                 <p className="text-base leading-relaxed text-gray-500">
-                  You have already made a booking for this day. Would you like
-                  to change the seat?
+                  You have already made a booking for this day. Go to My
+                  Bookings page to manage your current bookings
                 </p>
               </div>
-              <div className="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b">
+              <div className="flex items-center justify-end p-4 md:p-5 border-t border-gray-200 rounded-b space-x-4">
                 <button
                   onClick={onClose}
                   className="text-white bg-black hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                 >
-                  Yes
+                  Close
                 </button>
+                <Link
+                  to="/my-bookings"
+                  className="text-white bg-black hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                >
+                  My Bookings
+                </Link>
               </div>
             </div>
           </div>

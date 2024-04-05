@@ -1,29 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Transition } from "@headlessui/react";
-import * as apiClient from "../api-client.js";
-import { useParams } from "react-router-dom";
-import { useMutation } from "react-query";
-import { useAppContext } from "../contexts/AppContext.jsx";
 import roomIcon from "../room.webp";
+
 const BookingSideBarCroom = ({ croom, closeModal }) => {
-  const { croomId } = useParams();
-  const [currentUser, setCurrentUser] = useState(null);
-  const [loadingUser, setLoadingUser] = useState(true);
-  const { showToast } = useAppContext();
-  useEffect(() => {
-    const fetchCurrentUser = async () => {
-      try {
-        const userData = await apiClient.fetchCurrentUser();
-        setCurrentUser(userData);
-        setLoadingUser(false);
-      } catch (error) {
-        console.error("Error fetching current user:", error.message);
-      }
-    };
-
-    fetchCurrentUser();
-  }, []);
-
   return (
     <>
       <Transition
@@ -48,9 +27,8 @@ const BookingSideBarCroom = ({ croom, closeModal }) => {
                     className="mr-2"
                     style={{ width: "48px", height: "48px" }}
                   />
-                  C-1
+                  C-{croom.croomNumber}
                 </h3>
-
                 <button
                   className="text-gray-500 hover:text-gray-700 focus:outline-none"
                   onClick={() => closeModal("closeIcon")}
@@ -73,24 +51,21 @@ const BookingSideBarCroom = ({ croom, closeModal }) => {
             </div>
             <div className="p-4">
               <div className="flex justify-between mb-4">
-                <p className="text-base text-gray-700">Book for:</p>
-                <p className="text-base text-gray-700">Loading</p>
-              </div>
-              <div className="flex justify-between mb-4">
-                <p className="text-base text-gray-700">Status:</p>
-                <p> Loading</p>
-              </div>
-              <div className="flex justify-between mb-4">
-                <p className="text-base text-gray-700">Floor:</p>
-                <p className="text-base text-gray-700">LOADING</p>
-              </div>
-              <div className="flex justify-between mb-4">
-                <p className="text-base text-gray-700 mr-4">Amenities:</p>
+                <p className="text-base text-gray-700">
+                  Conference room {croom.croomNumber} is available at all times
+                  in a first come first served way. Ensure that a meeting does
+                  not exceed 3 hours.
+                </p>
               </div>
             </div>
           </div>
           <div className="p-4">
-            <button>Loading</button>
+            <button
+              className={`text-white ${"bg-black hover:bg-gray-800"} focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 w-full`}
+              onClick={() => closeModal("closeIcon")}
+            >
+              Close
+            </button>
           </div>
         </div>
       </Transition>
