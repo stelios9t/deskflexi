@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Croom2Status } from "../../icons/Croom2Status";
 import { CircleStatus } from "../../../Floor1/icons/Property1Status/CircleStatus.jsx";
 import wall_1 from "../../static/img/wall-1.svg";
 import wall from "../../static/img/wall.svg";
