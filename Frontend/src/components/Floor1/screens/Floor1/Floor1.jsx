@@ -125,29 +125,32 @@ const Floor1 = () => {
           };
           const { data } = await apiClient.searchDesks(searchParams);
           if (data && data.length === 1) {
-            // Found exactly one desk, navigate to its detail view
-            navigate(`/detail/desk/${data[0]._id}`);
-            setDeskDetails(data[0]);
-            setCroomDetails(null);
-            if (clickedDeskId !== data[0]._id) {
-              // Reset clickedDeskId if the searched desk is different
+            // Assume each desk data includes a 'floor' property
+            if (data[0].floor === searchContext.floor) {
+              // Desk is on the current floor
+              navigate(`/detail/desk/${data[0]._id}`);
+              setDeskDetails(data[0]);
+              setCroomDetails(null);
+              setClickedDeskId(data[0]._id);
+            } else {
+              // Desk not on current floor
+              showToast({
+                message: "No such desk number on this floor",
+                type: "ERROR",
+              });
+              setDeskDetails(null);
+              setCroomDetails(null);
               setClickedDeskId(null);
             }
           } else {
             setDeskDetails(null);
             setCroomDetails(null);
-            showToast({
-              message: "Desk number does not exists",
-              type: "ERROR",
-            });
-            // Reset clickedDeskId as no desk matches the search
             setClickedDeskId(null);
           }
         } catch (error) {
           console.error("Error searching for desks:", error.message);
           setDeskDetails(null);
           setCroomDetails(null);
-          // Consider resetting clickedDeskId in case of error too
           setClickedDeskId(null);
         }
       }
@@ -159,26 +162,8 @@ const Floor1 = () => {
     searchContext.checkIn,
     searchContext.checkOut,
     searchContext.floor,
+    showToast,
   ]);
-
-  useEffect(() => {
-    console.log(
-      `Search context changed: Desk Number ${searchContext.deskNumber}`
-    );
-    // Debug log to check if this effect runs unexpectedly
-    // Potentially affecting the deskDetails state after a desk click
-  }, [
-    searchContext.deskNumber,
-    searchContext.checkIn,
-    searchContext.checkOut,
-    searchContext.floor,
-  ]);
-  useEffect(() => {
-    console.log("Component re-rendered");
-  }, [deskDetails, clickedDeskId, croomDetails, clickedCroomId]);
-  useEffect(() => {
-    console.log("Desk Details updated:", deskDetails);
-  }, [deskDetails]);
 
   const handleDeskClick = async (deskId) => {
     console.log(`Desk clicked: ${deskId}`); // Debug log
