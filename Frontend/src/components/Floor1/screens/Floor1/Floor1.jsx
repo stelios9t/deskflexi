@@ -125,15 +125,12 @@ const Floor1 = () => {
           };
           const { data } = await apiClient.searchDesks(searchParams);
           if (data && data.length === 1) {
-            // Assume each desk data includes a 'floor' property
             if (data[0].floor === searchContext.floor) {
-              // Desk is on the current floor
               navigate(`/detail/desk/${data[0]._id}`);
               setDeskDetails(data[0]);
               setCroomDetails(null);
               setClickedDeskId(data[0]._id);
             } else {
-              // Desk not on current floor
               showToast({
                 message: "No such desk number on this floor",
                 type: "ERROR",

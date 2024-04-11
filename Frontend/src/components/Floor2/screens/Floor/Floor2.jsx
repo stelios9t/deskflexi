@@ -118,29 +118,29 @@ const Floor2 = () => {
           };
           const { data } = await apiClient.searchDesks(searchParams);
           if (data && data.length === 1) {
-            // Found exactly one desk, navigate to its detail view
-            navigate(`/detail/desk/${data[0]._id}`);
-            setDeskDetails(data[0]);
-            setCroomDetails(null);
-            if (clickedDeskId !== data[0]._id) {
-              // Reset clickedDeskId if the searched desk is different
+            if (data[0].floor === searchContext.floor) {
+              navigate(`/detail/desk/${data[0]._id}`);
+              setDeskDetails(data[0]);
+              setCroomDetails(null);
+              setClickedDeskId(data[0]._id);
+            } else {
+              showToast({
+                message: "No such desk number on this floor",
+                type: "ERROR",
+              });
+              setDeskDetails(null);
+              setCroomDetails(null);
               setClickedDeskId(null);
             }
           } else {
             setDeskDetails(null);
             setCroomDetails(null);
-            showToast({
-              message: "Desk number does not exist",
-              type: "ERROR",
-            });
-            // Reset clickedDeskId as no desk matches the search
             setClickedDeskId(null);
           }
         } catch (error) {
           console.error("Error searching for desks:", error.message);
           setDeskDetails(null);
           setCroomDetails(null);
-          // Consider resetting clickedDeskId in case of error too
           setClickedDeskId(null);
         }
       }
@@ -152,6 +152,7 @@ const Floor2 = () => {
     searchContext.checkIn,
     searchContext.checkOut,
     searchContext.floor,
+    showToast,
   ]);
 
   const handleDeskClick = async (deskId) => {
