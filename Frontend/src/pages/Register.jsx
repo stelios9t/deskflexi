@@ -31,26 +31,22 @@ const Register = () => {
     },
   });
 
-  const onSubmit = handleSubmit(async (data) => {
+  const onSubmit = async (data) => {
     const formData = new FormData();
     formData.append("firstName", data.firstName);
     formData.append("lastName", data.lastName);
     formData.append("email", data.email);
     formData.append("role", data.role);
     formData.append("password", data.password);
-    formData.append("confirmPassword", data.confirmPassword);
 
     if (data.imageFile && data.imageFile[0]) {
       formData.append("imageFile", data.imageFile[0]);
     }
 
-    try {
-      await mutation.mutateAsync(formData);
-      // Handle success, navigate or show message
-    } catch (error) {
-      // Handle error, show error message
-    }
-  });
+    mutation.mutateAsync(formData).catch((error) => {
+      console.error("Registration error:", error);
+    });
+  };
   return (
     <form className="flex flex-col gap-5" onSubmit={handleSubmit(onSubmit)}>
       <h2 className="text-3xl font-bold">Create an Account</h2>
@@ -60,7 +56,21 @@ const Register = () => {
             First Name
             <input
               className="border rounded w-full py-1 px-2 font-normal"
-              {...register("firstName", { required: "This field is required" })}
+              {...register("firstName", {
+                required: "This field is required",
+                minLength: {
+                  value: 1,
+                  message: "First name must be at least 1 character",
+                },
+                maxLength: {
+                  value: 15,
+                  message: "First name must not exceed 15 characters",
+                },
+                pattern: {
+                  value: /^[A-Za-z]+$/,
+                  message: "First name must contain only letters",
+                },
+              })}
             />
             {errors.firstName && (
               <span className="text-red-500">{errors.firstName.message}</span>
@@ -72,7 +82,21 @@ const Register = () => {
             Last Name
             <input
               className="border rounded w-full py-1 px-2 font-normal"
-              {...register("lastName", { required: "This field is required" })}
+              {...register("lastName", {
+                required: "This field is required",
+                minLength: {
+                  value: 1,
+                  message: "Last name must be at least 1 character",
+                },
+                maxLength: {
+                  value: 15,
+                  message: "Last name must not exceed 15 characters",
+                },
+                pattern: {
+                  value: /^[A-Za-z]+$/,
+                  message: "Last name must contain only letters",
+                },
+              })}
             />
             {errors.lastName && (
               <span className="text-red-500">{errors.lastName.message}</span>
@@ -143,7 +167,16 @@ const Register = () => {
               required: "This field is required",
               minLength: {
                 value: 6,
-                message: "Password must be minimum 6 characters",
+                message: "Password must be at least 6 characters",
+              },
+              maxLength: {
+                value: 16,
+                message: "Password must not exceed 16 characters",
+              },
+              pattern: {
+                value: /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/,
+                message:
+                  "Password must contain at least one number and one symbol",
               },
             })}
           />

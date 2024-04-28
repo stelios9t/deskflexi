@@ -38,13 +38,29 @@ router.post(
   upload.array("imageFile", 1),
 
   [
-    check("firstName", "First Name is required").isString(),
-    check("lastName", "Last Name is required").isString(),
+    check("firstName")
+      .isAlpha()
+      .withMessage("First name must contain only letters")
+      .isLength({ min: 1, max: 15 })
+      .withMessage("First name must be between 1 and 15 characters"),
+    check("lastName")
+      .isAlpha()
+      .withMessage("Last name must contain only letters")
+      .isLength({ min: 1, max: 15 })
+      .withMessage("Last name must be between 1 and 15 characters"),
     check("role", "Role is required").isString(),
-    check("email", "Email is required").isEmail(),
-    check("password", "Password with 6 or more characters required").isLength({
-      min: 6,
-    }),
+    check("email", "Email is required")
+      .isEmail()
+      .withMessage("Email must be a valid email address and include '@'")
+      .matches(/@/)
+      .withMessage("Email must include '@'"),
+    check("password")
+      .isLength({ min: 6, max: 16 })
+      .withMessage("Password must be between 6 and 16 characters long")
+      .matches(/\d/)
+      .withMessage("Password must contain at least one number")
+      .matches(/[\W_]/)
+      .withMessage("Password must contain at least one symbol"),
   ],
   async (req, res) => {
     const errors = validationResult(req);

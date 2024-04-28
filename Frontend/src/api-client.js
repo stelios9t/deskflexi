@@ -16,16 +16,18 @@ export const register = async (formData) => {
     const response = await fetch(`${API_BASE_URL}/api/users/register`, {
       method: "POST",
       credentials: "include",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
       body: formData,
     });
 
     if (!response.ok) {
       const responseBody = await response.json();
-      throw new Error(responseBody.message);
+      throw new Error(responseBody.message || "Failed to register");
     }
 
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
     throw new Error(error.message);
   }
