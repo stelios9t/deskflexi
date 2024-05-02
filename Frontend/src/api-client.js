@@ -16,9 +16,7 @@ export const register = async (formData) => {
     const response = await fetch(`${API_BASE_URL}/api/users/register`, {
       method: "POST",
       credentials: "include",
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+
       body: formData,
     });
 
@@ -289,6 +287,7 @@ export const updateUserById = async (formData) => {
 
     if (!response.ok) {
       const errorData = await response.json();
+      console.error(`Failed to update user: ${errorData.message}`);
       throw new Error(`Failed to update user: ${errorData.message}`);
     }
 

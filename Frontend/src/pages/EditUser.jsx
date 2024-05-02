@@ -138,6 +138,33 @@ const EditUser = () => {
               <option value="IT Admin">IT Admin</option>
               <option value="Manager">Manager</option>
               <option value="Software Engineer">Software Engineer</option>
+              <option value="Graduate Software Engineer">
+                Graduate Software Engineer
+              </option>
+              <option value="Test Engineer">Test Engineer</option>
+              <option value="Quality Assurance Engineer">
+                Quality Assurance Engineer
+              </option>
+              <option value="DevOps Engineer">DevOps Engineer</option>
+              <option value="Product Manager">Product Manager</option>
+              <option value="UI/UX Designer">UI/UX Designer</option>
+              <option value="Systems Analyst">Systems Analyst</option>
+              <option value="Network Engineer">Network Engineer</option>
+              <option value="Cybersecurity Specialist">
+                Cybersecurity Specialist
+              </option>
+              <option value="Data Scientist">Data Scientist</option>
+              <option value="Cloud Solutions Architect">
+                Cloud Solutions Architect
+              </option>
+              <option value="Technical Support Specialist">
+                Technical Support Specialist
+              </option>
+              <option value="Blockchain Developer">Blockchain Developer</option>
+              <option value="AI/ML Engineer">AI/ML Engineer</option>
+              <option value="Front-end Developer">Front-end Developer</option>
+              <option value="Back-end Developer">Back-end Developer</option>
+              <option value="Full Stack Developer">Full Stack Developer</option>
             </select>
           </label>
           {errors.role && (

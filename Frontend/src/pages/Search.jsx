@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useSearchContext } from "../contexts/SearchContext";
 import { useQuery } from "react-query";
 import * as apiClient from "../api-client";
-import AmenitiesFilter from "../components/AmenitiesFilter";
 import LoadingSpinner from "../components/LoadingSpinner.jsx";
 import Floor1 from "../components/Floor1/screens/Floor1/Floor1.jsx";
 import Floor2 from "../components/Floor2/screens/Floor/Floor2.jsx";
@@ -53,19 +52,6 @@ const Search = () => {
 
   return (
     <div className="mr-60">
-      {/* amenities filter selection 
-       will be implemented in the future, */}
-      {/* <div className="rounded-lg border border-slate-300 p-5 h-fit sticky top-10">
-        <div className="space-y-5">
-          <h3 className="text-lg font-semibold border-b border-slate-300 pb-5">
-            Filter by:
-          </h3>
-        </div>
-        <AmenitiesFilter
-          selectedAmenities={selectedAmenities}
-          onChange={handleAmenityChange}
-        />
-      </div> */}
       {isLoading && (
         <div className="absolute z-10 inset-0 bg-black bg-opacity-25 flex justify-center items-center">
           <LoadingSpinner />

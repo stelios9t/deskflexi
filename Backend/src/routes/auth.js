@@ -11,9 +11,13 @@ router.post(
   "/login",
   [
     check("email", "Email is required").isEmail(),
-    check("password", "Password with 6 or more characters required").isLength({
-      min: 6,
-    }),
+    check("password")
+      .isLength({ min: 6, max: 16 })
+      .withMessage("Incorrect password")
+      .matches(/\d/)
+      .withMessage("Incorrect password")
+      .matches(/[\W_]/)
+      .withMessage("Incorrect password"),
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -33,7 +37,6 @@ router.post(
         throw new HttpError("Invalid credentials", 400);
       }
 
-      // Attach user object to request
       req.user = user;
 
       const token = jwt.sign(
@@ -41,7 +44,6 @@ router.post(
         process.env.JWT_SECRET_KEY,
         { expiresIn: "1d" }
       );
-      // req.user = { ...user.toObject(), role: user.role };
 
       res.cookie("auth_token", token, {
         httpOnly: true,

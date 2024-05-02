@@ -6,8 +6,8 @@ test.beforeEach(
     await page.goto(UI_URL);
     await page.getByRole("link", { name: "Sign In" }).click();
     await expect(page.getByRole("heading", { name: "Sign In" })).toBeVisible();
-    await page.locator("[name=email]").fill("testing1@gmail.com");
-    await page.locator("[name=password]").fill("password");
+    await page.locator("[name=email]").fill("test@hotmail.com");
+    await page.locator("[name=password]").fill("Password1!");
     await page.getByRole("button", { name: "Log In" }).click();
     await expect(page.getByText("Sign in Successful")).toBeVisible();
   },
@@ -24,6 +24,7 @@ test("should show desk search results", async ({ page }) => {
   await expect(page.getByText("D-1")).toBeVisible();
 });
 
+//make sure that the desk is not booked before running the test
 test("should book desk", async ({ page }) => {
   await page.goto(UI_URL);
   await page
@@ -35,5 +36,5 @@ test("should book desk", async ({ page }) => {
   await expect(page.getByText("Booking Saved!")).toBeVisible();
 
   await page.getByRole("link", { name: "My Bookings" }).click();
-  await expect(page.getByText("D-1")).toBeVisible();
+  await expect(page.getByText("Desk Number: 1")).toBeVisible();
 });

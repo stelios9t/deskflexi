@@ -5,7 +5,8 @@ import * as apiClient from "../api-client";
 import { FaRegBuilding } from "react-icons/fa";
 import Pagination from "../components/Pagination";
 import LoadingSpinner from "../components/LoadingSpinner";
-import roomIcon from "../room.webp";
+import roomIcon from "../images/room.webp";
+
 const MyCrooms = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isPageLoading, setIsPageLoading] = useState(false);

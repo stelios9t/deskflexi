@@ -65,7 +65,7 @@ router.post("/:deskId/bookings", verifyToken, async (req, res) => {
       lastName: req.body.lastName,
       email: req.body.email,
       checkIn: requestedCheckIn,
-      // Assuming checkOut is not used as per your new system's logic
+      // Assuming checkOut is not used as per new system's logic
       checkOut: requestedCheckIn,
     };
 

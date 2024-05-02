@@ -40,15 +40,6 @@ const Floor1 = () => {
 
   const { showToast } = useAppContext();
   useEffect(() => {
-    // const croomId = "660a7bd61ecd903d915debab";
-    // const fetchCroomDetails = async () => {
-    //   try {
-    //     const croomData = await apiClient.fetchCroomById(croomId);
-    //     setCroomDetails(croomData);
-    //   } catch (error) {
-    //     console.error("Error fetching conference room details:", error.message);
-    //   }
-    // };
     const fetchDesksAndCheckBookingStatus = async () => {
       setIsLoading(true);
 

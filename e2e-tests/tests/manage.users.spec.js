@@ -6,8 +6,8 @@ test.beforeEach(
     await page.goto(UI_URL);
     await page.getByRole("link", { name: "Sign In" }).click();
     await expect(page.getByRole("heading", { name: "Sign In" })).toBeVisible();
-    await page.locator("[name=email]").fill("testing1@gmail.com");
-    await page.locator("[name=password]").fill("password");
+    await page.locator("[name=email]").fill("test@hotmail.com");
+    await page.locator("[name=password]").fill("Password1!");
     await page.getByRole("button", { name: "Log In" }).click();
     await expect(page.getByText("Sign in Successful")).toBeVisible();
   },
@@ -16,7 +16,7 @@ test.beforeEach(
 
 test("should display users", async ({ page }) => {
   await page.goto(`${UI_URL}/my-users`);
-  await expect(page.getByText("Name: Stelios Tampouris")).toBeVisible();
+  await expect(page.getByText("Stelios Tampouris")).toBeVisible();
   await expect(page.getByText("Role")).toBeVisible();
   await expect(
     page.getByRole("link", { name: "View Details" }).first()

@@ -4,7 +4,7 @@ import DetailsSection from "./DetailsSection";
 import AmenitiesSection from "./AmenitiesSection";
 import { useNavigate } from "react-router-dom";
 
-const ManageDeskForm = ({ onSave, isLoading, desk, mode }) => {
+const ManageDeskForm = ({ onSave, isLoading, desk, mode, onDelete }) => {
   const formMethods = useForm();
   const { handleSubmit, reset, setValue } = formMethods;
   const navigate = useNavigate();

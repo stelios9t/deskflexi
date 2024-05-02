@@ -43,23 +43,21 @@ router.get("/:id", verifyToken, async (req, res) => {
 
 router.put("/:userId", verifyToken, async (req, res) => {
   try {
-    const updatedUser = req.body;
-    const user = await User.findOneAndUpdate(
-      {
-        _id: req.params.userId,
-      },
-      updatedUser,
-      { new: true }
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: req.params.userId },
+      req.body,
+      { new: true, runValidators: true }
     );
-    if (!user) {
+    if (!updatedUser) {
       return res.status(404).json({ message: "User not found" });
     }
-    await user.save();
-    res.status(201).json(user);
+    res.json(updatedUser);
   } catch (error) {
+    console.error("Error updating user:", error);
     res.status(500).json({ message: "Something went wrong" });
   }
 });
+
 router.delete("/:userId", verifyToken, async (req, res) => {
   try {
     const { userId } = req.params;

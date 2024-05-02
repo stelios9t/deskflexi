@@ -1,6 +1,6 @@
 import React from "react";
 import { Transition } from "@headlessui/react";
-import roomIcon from "../room.webp";
+import roomIcon from "../images/room.webp";
 
 const BookingSideBarCroom = ({ croom, closeModal }) => {
   return (
